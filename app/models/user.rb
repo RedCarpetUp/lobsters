@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable#,
+          #:registerable, :recoverable, :rememberable, :trackable, :validatable
   has_many :stories,
     -> { includes :user }
   has_many :comments
@@ -31,7 +35,7 @@ class User < ActiveRecord::Base
     :source => :story
   has_many :hats
 
-  has_secure_password
+  #has_secure_password
 
   validates :email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ },
     :uniqueness => { :case_sensitive => false }
@@ -48,7 +52,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  before_save :check_session_token
+  #before_save :check_session_token
   before_validation :on => :create do
     self.create_rss_token
     self.create_mailing_list_token
@@ -197,11 +201,11 @@ class User < ActiveRecord::Base
     self.karma >= MIN_KARMA_TO_SUBMIT_STORIES
   end
 
-  def check_session_token
-    if self.session_token.blank?
-      self.session_token = Utils.random_str(60)
-    end
-  end
+  #def check_session_token
+  #  if self.session_token.blank?
+  #    self.session_token = Utils.random_str(60)
+  #  end
+  #end
 
   def create_mailing_list_token
     if self.mailing_list_token.blank?
@@ -234,8 +238,8 @@ class User < ActiveRecord::Base
 
       self.invitations.destroy_all
 
-      self.session_token = nil
-      self.check_session_token
+      #self.session_token = nil
+      #self.check_session_token
 
       self.deleted_at = Time.now
       self.save!

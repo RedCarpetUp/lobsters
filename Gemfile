@@ -20,8 +20,8 @@ gem "dynamic_form"
 
 gem "exception_notification"
 
-gem "bcrypt", "~> 3.1.2"
-
+#gem "bcrypt", "~> 3.1.2"
+gem 'devise'
 gem "nokogiri", "= 1.6.1"
 gem "htmlentities"
 gem "rdiscount"
@@ -37,4 +37,5 @@ group :test, :development do
   gem "machinist"
   gem "sqlite3"
   gem "faker"
+  gem 'web-console', '~> 2.0'
 end

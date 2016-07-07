@@ -40,13 +40,14 @@ class SignupController < ApplicationController
     end
 
     @title = "Signup"
-
+    #no password complexity check?
     @new_user = User.new(user_params)
     @new_user.invited_by_user_id = @invitation.user_id
 
     if @new_user.save
       @invitation.destroy
-      session[:u] = @new_user.session_token
+      #session[:u] = @new_user.session_token
+      sign_in @new_user
       flash[:success] = "Welcome to #{Rails.application.name}, " <<
         "#{@new_user.username}!"
 

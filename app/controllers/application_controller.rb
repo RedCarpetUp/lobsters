@@ -8,8 +8,10 @@ class ApplicationController < ActionController::Base
   TAG_FILTER_COOKIE = :tag_filters
 
   def authenticate_user
-    if session[:u] &&
-    (user = User.where(:session_token => session[:u].to_s).first) &&
+    #if session[:u] &&
+    #(user = User.where(:session_token => session[:u].to_s).first) &&
+    if user_signed_in? &&
+      (user = current_user) &&
     user.is_active?
       @user = user
       Rails.logger.info "  Logged in as user #{@user.id} (#{@user.username})"

@@ -3,7 +3,9 @@ class LoginController < ApplicationController
 
   def logout
     if @user
-      reset_session
+      #reset_session
+      sign_out @user
+      @user = false
     end
 
     redirect_to "/"
@@ -27,7 +29,8 @@ class LoginController < ApplicationController
         raise "no user"
       end
 
-      if !user.try(:authenticate, params[:password].to_s)
+      #if !user.try(:authenticate, params[:password].to_s)
+      if !user.valid_password?(params[:password].to_s)
         raise "authentication failed"
       end
 
@@ -41,12 +44,14 @@ class LoginController < ApplicationController
           "unmoderated comments have been undeleted."
       end
 
-      session[:u] = user.session_token
+      #session[:u] = user.session_token
+      sign_in user
 
-      if !user.password_digest.to_s.match(/^\$2a\$#{BCrypt::Engine::DEFAULT_COST}\$/)
-        user.password = user.password_confirmation = params[:password].to_s
-        user.save!
-      end
+      #didnt understand the purpose, commented to prevent issues
+      #if !user.password_digest.to_s.match(/^\$2a\$#{BCrypt::Engine::DEFAULT_COST}\$/)
+      #  user.password = user.password_confirmation = params[:password].to_s
+      #  user.save!
+      #end
 
       if (rd = session[:redirect_to]).present?
         session.delete(:redirect_to)
@@ -114,7 +119,8 @@ class LoginController < ApplicationController
         end
 
         if @reset_user.save && @reset_user.is_active?
-          session[:u] = @reset_user.session_token
+          sign_in @reset_user
+          #session[:u] = @reset_user.session_token
           return redirect_to "/"
         else
           flash[:error] = "Could not reset password."

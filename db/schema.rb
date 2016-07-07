@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160704022756) do
+ActiveRecord::Schema.define(version: 20160707174517) do
 
   create_table "comments", force: true do |t|
     t.datetime "created_at",                                                                    null: false
@@ -184,13 +184,12 @@ ActiveRecord::Schema.define(version: 20160704022756) do
 
   create_table "users", force: true do |t|
     t.string   "username",                     limit: 50
-    t.string   "email",                        limit: 100
-    t.string   "password_digest",              limit: 75
+    t.string   "email",                        limit: 100,      default: "",    null: false
+    t.string   "encrypted_password",           limit: 75,       default: "",    null: false
     t.datetime "created_at"
     t.boolean  "email_notifications",                           default: false
     t.boolean  "is_admin",                                      default: false
     t.string   "password_reset_token",         limit: 75
-    t.string   "session_token",                limit: 75,       default: "",    null: false
     t.text     "about",                        limit: 16777215
     t.integer  "invited_by_user_id"
     t.boolean  "email_replies",                                 default: false
@@ -217,11 +216,11 @@ ActiveRecord::Schema.define(version: 20160704022756) do
     t.string   "disabled_invite_reason",       limit: 200
   end
 
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["mailing_list_mode"], name: "mailing_list_enabled", using: :btree
   add_index "users", ["mailing_list_token"], name: "mailing_list_token", unique: true, using: :btree
   add_index "users", ["password_reset_token"], name: "password_reset_token", unique: true, using: :btree
   add_index "users", ["rss_token"], name: "rss_token", unique: true, using: :btree
-  add_index "users", ["session_token"], name: "session_hash", unique: true, using: :btree
   add_index "users", ["username"], name: "username", unique: true, using: :btree
 
   create_table "votes", force: true do |t|

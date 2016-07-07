@@ -8,9 +8,11 @@ class SettingsController < ApplicationController
   end
 
   def delete_account
-    if @user.try(:authenticate, params[:user][:password].to_s)
+    #if @user.try(:authenticate, params[:user][:password].to_s)
+    if @user.valid_password?(params[:password].to_s)
+      sign_out @user
       @user.delete!
-      reset_session
+      #reset_session
       flash[:success] = "Your account has been deleted."
       return redirect_to "/"
     end
@@ -64,6 +66,8 @@ class SettingsController < ApplicationController
   end
 
   def update
+    #no email verificn trigger?
+    #no password complexity check?
     @edit_user = @user.clone
 
     if @edit_user.update_attributes(user_params)
