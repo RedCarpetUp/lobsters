@@ -1,5 +1,6 @@
 Lobsters::Application.routes.draw do
-  devise_for :users, :skip => [:sessions]
+  #devise_for :users, :skip => [:sessions], :controllers => { :omniauth_callbacks => "omniauth_callbacks", :registrations => "registrations" }
+  devise_for :users, :skip => [:sessions], :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   scope :format => "html" do
     root :to => "home#index",
       :protocol => (Rails.application.config.force_ssl ? "https://" : "http://"),

@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable#,
+  devise :database_authenticatable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]#,
           #:registerable, :recoverable, :rememberable, :trackable, :validatable
   has_many :stories,
     -> { includes :user }
@@ -405,4 +405,42 @@ class User < ActiveRecord::Base
         "stories.user_id <> votes.user_id").
       order("id DESC")
   end
+
+  def self.from_omniauth_facebook(auth)
+    user = User.where(provider: auth.provider, uid: auth.uid).first
+    unless user #if already registered user with this fb user's email, log her in
+      user = User.where(email: auth.email).first
+    end
+    unless user
+
+        user = User.new
+        user.provider = auth.provider
+        user.uid = auth.uid
+        user.email = auth.info.email
+        user.password = Devise.friendly_token[0,20]
+        user.username = auth.info.name.gsub(/\s+/, "")
+
+    end
+    user
+  end
+
+  def self.from_omniauth_google(access_token)
+    data = access_token.info
+    user = User.where(provider: access_token["provider"], uid: access_token["uid"]).first
+    unless user #if already registered user with this fb user's email, log her in
+      user = User.where(email: data["email"]).first
+    end
+    unless user
+
+        user = User.new
+        user.provider = access_token["provider"]
+        user.uid = access_token["uid"]
+        user.username = data["name"].gsub(/\s+/, "") 
+        user.email = data["email"]
+        user.password = Devise.friendly_token[0,20]
+
+    end
+    user
+  end
+
 end

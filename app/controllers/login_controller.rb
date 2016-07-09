@@ -13,6 +13,11 @@ class LoginController < ApplicationController
 
   def index
     @title = "Login"
+
+    #logger.debug "DEADBEEFpredel: #{session[:invite_code]}"
+    session.delete(:invite_code)
+    #logger.debug "DEADBEEFpostdel: #{session[:invite_code]}"
+
     @referer ||= request.referer
     render :action => "index"
   end

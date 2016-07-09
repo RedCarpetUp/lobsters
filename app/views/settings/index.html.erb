@@ -18,17 +18,19 @@
       </span>
     </div>
 
-    <div class="boxline">
-      <%= f.label :password, "New Password:", :class => "required" %>
-      <%= f.password_field :password, :size => 40, :autocomplete => "off" %>
-    </div>
+    <% if @edit_user.provider.blank? %>
+      <div class="boxline">
+        <%= f.label :password, "New Password:", :class => "required" %>
+        <%= f.password_field :password, :size => 40, :autocomplete => "off" %>
+      </div>
 
-    <div class="boxline">
-      <%= f.label :password_confirmation, "Confirm Password:",
-        :class => "required" %>
-      <%= f.password_field :password_confirmation, :size => 40,
-        :autocomplete => "off" %>
-    </div>
+      <div class="boxline">
+        <%= f.label :password_confirmation, "Confirm Password:",
+          :class => "required" %>
+        <%= f.password_field :password_confirmation, :size => 40,
+          :autocomplete => "off" %>
+      </div>
+    <% end %>
 
     <div class="boxline">
       <%= f.label :email, "E-mail Address:", :class => "required" %>

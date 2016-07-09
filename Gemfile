@@ -29,6 +29,10 @@ gem "rdiscount"
 # for twitter-posting bot
 gem "oauth"
 
+
+gem "omniauth-facebook"
+gem "omniauth-google-oauth2"
+
 # for parsing incoming mail
 gem "mail"
 

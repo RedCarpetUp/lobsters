@@ -27,6 +27,10 @@ class SignupController < ApplicationController
 
     @title = "Signup"
 
+    #logger.debug "DEADBEEFpreass: #{session[:invite_code]}"
+    session[:invite_code] = params[:invitation_code].to_s
+    #logger.debug "DEADBEEFpostass: #{session[:invite_code]}"
+
     @new_user = User.new
     @new_user.email = @invitation.email
 

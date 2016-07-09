@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160707174517) do
+ActiveRecord::Schema.define(version: 20160707212432) do
 
   create_table "comments", force: true do |t|
     t.datetime "created_at",                                                                    null: false
@@ -214,6 +214,8 @@ ActiveRecord::Schema.define(version: 20160707174517) do
     t.datetime "disabled_invite_at"
     t.integer  "disabled_invite_by_user_id"
     t.string   "disabled_invite_reason",       limit: 200
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
