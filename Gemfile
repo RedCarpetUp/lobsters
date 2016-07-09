@@ -36,7 +36,7 @@ gem "omniauth-google-oauth2"
 # for parsing incoming mail
 gem "mail"
 
-gem 'mailgun_rails', '0.8.0', :path=> "vendor/gems/mailgun_rails-0.8.0"
+gem 'mailgun_rails', '0.8.0', :path=> "vendor/gems/mailgun_rails-0.8.0"#, :require => ["mailgun_rails", "rest-client"]
 
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
