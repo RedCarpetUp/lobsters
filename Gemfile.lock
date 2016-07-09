@@ -96,6 +96,7 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
+    pg (0.18.4)
     rack (1.5.5)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -185,6 +186,7 @@ DEPENDENCIES
   oauth
   omniauth-facebook
   omniauth-google-oauth2
+  pg
   rails (= 4.1.12)
   rdiscount
   rspec-rails (~> 2.6)
