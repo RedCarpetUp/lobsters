@@ -1,4 +1,5 @@
 class Comment < ActiveRecord::Base
+  searchkick
   belongs_to :user
   belongs_to :story,
     :inverse_of => :comments

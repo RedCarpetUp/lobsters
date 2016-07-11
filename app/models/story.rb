@@ -1,4 +1,5 @@
 class Story < ActiveRecord::Base
+  searchkick
   belongs_to :user
   belongs_to :merged_into_story,
     :class_name => "Story",

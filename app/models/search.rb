@@ -22,7 +22,7 @@ class Search
   end
 
   def max_matches
-    ThinkingSphinx::Configuration.instance.settings["max_matches"] || 1000
+    1000
   end
 
   def persisted?
@@ -46,16 +46,19 @@ class Search
 
   def search_for_user!(user)
     opts = {
-      :ranker   => :bm25,
+      #elasticsearch sorts by relevance using internal _score value
+      #:ranker   => :bm25,
       :page     => [ self.page, self.page_count ].min,
       :per_page => self.per_page,
-      :include  => [ :story, :user ],
+      #:include  => [ :story, :user ],
     }
 
     if order == "newest"
-      opts[:order] = "created_at DESC"
+      opts[:order] = {"created_at": :desc}
     elsif order == "points"
-      opts[:order] = "score DESC"
+      opts[:order] = {"upvotes": :desc}
+    else
+      opts[:order] = {_score: :desc}
     end
 
     # extract domain query since it must be done separately
@@ -93,16 +96,29 @@ class Search
         []
       end
 
-    query = Riddle.escape(words)
+    #query = Riddle.escape(words)
+    query = words.gsub(/(['\/~"@])/, '\\\\\1')
+
 
     # go go gadget search
     self.results = []
     self.total_results = 0
     begin
-      self.results = ThinkingSphinx.search query, opts
-      self.total_results = self.results.total_entries
+      #self.results = ThinkingSphinx.search query, opts
+      #self.results =   Elasticsearch::Model.search({
+      #                      query: { match: {_all: query}}
+      #                      # highlight: { fields: { content: {}, title:{}, name:{}}},
+      #                      # sort: [{title: {order: "desc"}}]
+      #                      }, opts[:classes], {explain: :yaml}).records
+
+      #self.results = Story.search(query)
+
+      self.results = Searchkick.search query, index_name: opts[:classes], order: opts[:order]
+        
+      self.total_results = self.results.count
+
     rescue => e
-      Rails.logger.info "Error from Sphinx: #{e.inspect}"
+      Rails.logger.info "Error from searchkick: #{e.inspect}"
     end
 
     if self.page > self.page_count

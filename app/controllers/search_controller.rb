@@ -21,6 +21,7 @@ class SearchController < ApplicationController
       if @search.valid?
         @search.search_for_user!(@user)
       end
+      
     end
 
     render :action => "index"
