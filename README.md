@@ -1,9 +1,11 @@
 ###Lobsters Rails Project
 
-This is the source code to the site operating at
-[https://lobste.rs](https://lobste.rs).  It is a Rails 4 codebase and uses a
-SQL (MariaDB in production) backend for the database and Sphinx for the search
-engine.
+This is a fork of Lobsters Rails Project with certain new features and some backend changes:
+* Uses elasticsearch for search engine
+* Mailgun for mailing
+* Postgresql for database
+* Google, Facebook OAuth login
+* Devise for authentication system
 
 While you are free to fork this code and modify it (according to the [license](https://github.com/jcs/lobsters/blob/master/LICENSE))
 to run your own link aggregation website, this source code repository and bug
@@ -31,38 +33,46 @@ and 2.3.0.
 
          lobsters$ bundle
 
-* Create a MySQL (other DBs supported by ActiveRecord may work, only MySQL and
-MariaDB have been tested) database, username, and password and put them in a
+* Create a postgresql database, username, and password and put them in a
 `config/database.yml` file:
 
           development:
-            adapter: mysql2
-            encoding: utf8mb4
-            reconnect: false
-            database: lobsters_dev
-            socket: /tmp/mysql.sock
-            username: *username*
-            password: *password*
-            
-          test:
-            adapter: sqlite3
-            database: db/test.sqlite3
+            adapter: postgresql
+            encoding: unicode
+            database: lobsters_test
+            host: localhost
             pool: 5
             timeout: 5000
+            username: *username*
+            password: *password*
+
+
+* Create a secrets file at `config/secrets.rb`:
+          
+          development:
+            secret_key_base: *output of rake secret*
+
+            elasticsearch_url: *elasticsearch server url (default is localhost:9200)*
+
+            mailgun_domain: *mailgun domain*
+
+            mailgun_api_key: *mailgun api key*
+  
+            omniauth_facebook_app_id: *facebook app client id*
+            omniauth_facebook_app_secret: *facebook app client secret*
+
+            omniauth_google_client_id: *google app client id*
+            omniauth_google_client_secret: *google app client secret*
+
 
 * Load the schema into the new database:
 
           lobsters$ rake db:schema:load
 
-* Create a `config/initializers/secret_token.rb` file, using a randomly
-generated key from the output of `rake secret`:
 
-          Lobsters::Application.config.secret_key_base = 'your random secret here'
+* (Optional, only needed for the search engine) Install elasticsearch.  Build config and start server:
 
-* (Optional, only needed for the search engine) Install Sphinx.  Build Sphinx
-config and start server:
-
-          lobsters$ rake ts:rebuild
+          lobsters$ rake searchkick:reindex:all
 
 * Define your site's name and default domain, which are used in various places,
 in a `config/initializers/production.rb` or similar file:
@@ -94,5 +104,5 @@ in a `config/initializers/production.rb` or similar file:
 
 * In production, set up crontab or another scheduler to run regular jobs:
 
-          */20 * * * * cd /path/to/lobsters && env RAILS_ENV=production bundle exec rake ts:index > /dev/null
+          */20 * * * * cd /path/to/lobsters && env RAILS_ENV=production bundle exec rake searchkick:reindex:all > /dev/null
           */5 * * * *  cd /path/to/lobsters && env RAILS_ENV=production sh -c 'bundle exec ruby script/mail_new_activity; bundle exec ruby script/post_to_twitter'
