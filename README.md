@@ -6,6 +6,7 @@ This is a fork of Lobsters Rails Project with certain new features and some back
 * Postgresql for database
 * Google, Facebook OAuth login
 * Devise for authentication system
+* ReCaptcha check on invite request
 
 While you are free to fork this code and modify it (according to the [license](https://github.com/jcs/lobsters/blob/master/LICENSE))
 to run your own link aggregation website, this source code repository and bug
@@ -63,6 +64,9 @@ and 2.3.0.
 
             omniauth_google_client_id: *google app client id*
             omniauth_google_client_secret: *google app client secret*
+
+            recaptcha_public_key: '6LcEBiUTAAAAANbxxxxxxxxxxxxxxxxxxxxxxxxx'
+            recaptcha_private_key: '6LcEBiUTAAAAAAwxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 
 * Load the schema into the new database:
