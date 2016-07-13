@@ -40,6 +40,8 @@ gem "mail"
 
 gem 'mailgun_rails', '0.8.0', :path=> "vendor/gems/mailgun_rails-0.8.0"#, :require => ["mailgun_rails", "rest-client"]
 
+gem "recaptcha", require: "recaptcha/rails"
+
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
   gem "machinist"

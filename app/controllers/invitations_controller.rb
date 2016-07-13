@@ -65,11 +65,12 @@ class InvitationsController < ApplicationController
 
       @invitation_request.ip_address = request.remote_ip
 
-      if @invitation_request.save
+      if verify_recaptcha(model: @invitation_request) && @invitation_request.save
         flash[:success] = "You have been e-mailed a confirmation to " <<
           params[:invitation_request][:email].to_s << "."
         return redirect_to "/invitations/request"
       else
+        flash[:error] = "Errors were detected in the form, please recheck your details and captcha"
         render :action => :build
       end
     else
