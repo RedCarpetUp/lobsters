@@ -1,0 +1,25 @@
+<li class="story">
+
+  <div class="details">
+
+    <span class="link">
+        <%= link_to job_path(job) do %>
+          <%= job.title %>
+        <% end %>
+    </span>
+
+    <div class="byline">
+
+        <a href="/u/test" class="new_user"><%= job.company_name %></a>
+
+        <%= time_ago_in_words_label(job.created_at, :strip_about => true) %>
+
+    </div>
+
+    <div class="byline">
+      <%= job.intro %>
+    </div>
+
+  </div>
+
+</li>

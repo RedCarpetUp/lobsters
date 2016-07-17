@@ -146,5 +146,13 @@ Lobsters::Application.routes.draw do
     if defined?(BbsController) || Rails.env.development?
       get "/bbs" => "bbs#index"
     end
+
+    resources :jobs do
+      resources :applications
+      member do
+        post 'change_status'
+      end
+    end
+
   end
 end

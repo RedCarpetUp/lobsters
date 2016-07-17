@@ -17,6 +17,13 @@ class ApplicationController < ActionController::Base
       Rails.logger.info "  Logged in as user #{@user.id} (#{@user.username})"
     end
 
+    def require_user
+      if !user_signed_in?
+        flash[:error] = "You need to be signed in for this"
+        redirect_to login_path
+      end
+    end
+
     true
   end
 
