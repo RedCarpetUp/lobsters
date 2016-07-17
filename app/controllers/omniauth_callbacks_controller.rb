@@ -35,7 +35,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
         end
       else
         redirect_to root_path
-        flash[:notice] = "You are not yet signed upx"
+        flash[:notice] = "You are not yet signed up"
       end
     end
   end
