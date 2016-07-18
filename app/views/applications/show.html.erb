@@ -1,0 +1,31 @@
+<div class="box">
+<h2 style="margin-bottom:5px;">Applicant details</h2>
+
+<% if @application.applicant == current_user %>
+    <%= link_to "Edit", edit_job_application_path(@job, @application), :style => "color:#888;text-decoration:none;" %>
+  <span style="color: #888;">|</span>
+    <%= link_to "Delete", job_application_path(@job, @application), method: :delete, data: { confirm: 'Are You Sure?' }, :style => "color:#888;text-decoration:none;" %>
+<% end %>
+
+<% if user_signed_in? && current_user == @job.poster %>
+  <div class="box" style="float:right;">
+    <h3>Current Status: <%= @application.status %></h3>
+    <% @application.av_status.each do |x| %>
+      <h4><%= link_to x == "Hired" ? x.upcase.chomp('D') : x.upcase.chomp('ED') , change_status_job_application_path(@job, @application, x), method: :post  %></h4>
+    <% end %>
+  </div>
+<% end %>
+
+<h3>Name</h3>
+<p><%= @application.name %></p>
+
+<h3>Email</h3>
+<p><%= @application.email %></p>
+
+<h3>Contact no</h3>
+<p><%= @application.phoneno %></p>
+
+<h3>Details</h3>
+<p><%= @application.details %></p>
+
+</div>

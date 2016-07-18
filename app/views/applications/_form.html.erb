@@ -1,0 +1,50 @@
+<%= form_for [@job, @application], :url => @application.new_record? ? job_applications_path(@job, @application) : job_application_path(@job, @application) do |f| %>
+
+<% if f.object.errors.any? %>
+  <%= error_messages_for f.object %>
+<% end %>
+
+<div class="box">
+
+<div class="legend">
+  Apply for this job
+</div>
+
+<div class="boxline">
+<%= f.label :name, :class => "required" %>
+<%= f.text_field :name, :maxlength => 100 %>
+<div class="hintblock">Mention your name as it is in the documents</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :email , :class => "required" %>
+<%= f.email_field :email, :maxlength => 100 %>
+<div class="hintblock">Mention your email where you would like to be contacted regarding this job</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :phoneno , "Mobile no",:class => "required" %>
+<%= f.telephone_field :phoneno, :maxlength => 100 %>
+<div class="hintblock">Mention your phone number</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :details, "Description", :class => "required" %>
+<%= f.text_area :details, :style => "width: 709px !important;", :rows => 5 %>
+<div class="hintblock">Give a brief description about you, make sure it contains all the fields mentioned as required</div>
+</div>
+<br>
+
+</div>
+
+<div class="box">
+<div class="boxline actions">
+<%= f.submit(@application.new_record? ? 'Apply' : 'Edit') %>
+</div>
+</div>
+
+
+<% end %>

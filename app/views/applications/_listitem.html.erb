@@ -1,0 +1,11 @@
+<tr>
+<td>
+<span class="link">
+    <%= link_to job_application_path(@job, application) do %>
+      <%= application.name %>
+    <% end %>
+</span>
+</td>
+<td><%= time_ago_in_words_label(application.created_at, :strip_about => true) %></td>
+<td><%= application.status %></td>
+</tr>

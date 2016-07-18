@@ -8,13 +8,20 @@ class ApplicationsController < ApplicationController
   before_action :require_not_poster, only: [:new, :create]
  
   def change_status
-  	out_to_flash = @application.mod_status(params[:status])
-  	if out_to_flash.result == "success"
-      flash[:success] = out_to_flash.statement
-      redirect_to jobs_applications_path(@job)
-  	else
-      flash[:error] = out_to_flash.statement
-      redirect_to jobs_applications_path(@job)
+  	if @application.av_status.include?(params[:status].to_s)
+    logger.debug {"XXXXXXXXXXXXXCXXXXXXXXX: #{@application.to_yaml}"}
+      @application.status = params[:status].to_s
+    logger.debug {"XXXXXXXXXXXXXCXXXXXXXXX: #{@application.to_yaml}"}
+      if @application.save
+        flash[:success] = "Status updated successfully"
+        redirect_to job_application_path(@job, @application)
+  	  else
+        flash[:error] = "Status can't be updated"
+        redirect_to job_application_path(@job, @application)
+      end
+    else
+      flash[:error] = "Status can't be updated"
+      redirect_to job_application_path(@job, @application)
   	end
   end
 
@@ -35,10 +42,11 @@ class ApplicationsController < ApplicationController
     @application = Application.new(application_params)
     @application.applicant = current_user
     @application.job = Job.find(params[:job_id])
+    @application.status = "Applied"
 
     if @application.save
       flash[:success] = "Application Created!"
-      redirect_to job_application_path(@application)
+      redirect_to job_application_path(@job, @application)
     else
       render :new
     end
@@ -50,7 +58,7 @@ class ApplicationsController < ApplicationController
   def update
     if @application.update(application_params)
       flash[:success] = 'Updated Successfully!'
-      redirect_to job_application_path(@application)
+      redirect_to job_application_path(@job, @application)
     else
       render :edit
     end

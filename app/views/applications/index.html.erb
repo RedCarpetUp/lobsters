@@ -1,0 +1,43 @@
+<div class="box">
+
+<div class="legend">
+  Applications
+</div>
+
+<ol class="stories list">
+<table>
+	<tr>
+		<th>Applicant's Name</th>
+		<th>Applied on</th>
+		<th>Application Status</th>
+	</tr>
+  <%= render :partial => "applications/listitem", :collection => @applications,
+    :as => :application %>
+</table>
+</ol>
+
+</div>
+
+
+<style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding-left: 8px;
+}
+
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>

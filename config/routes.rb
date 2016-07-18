@@ -149,10 +149,10 @@ Lobsters::Application.routes.draw do
 
     resources :jobs do
       resources :applications
-      member do
-        post 'change_status'
-      end
     end
+
+    post '/jobs/:job_id/applications/:id/change_status/:status' => "applications#change_status", :as => "change_status_job_application"
+
 
   end
 end
