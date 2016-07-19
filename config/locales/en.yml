@@ -18,6 +18,7 @@ en:
   layouts:
     application:
       homelink: "Home"
+      joblink: "Jobs"
       recentlink: "Recent"
       commentslink: "Comments"
       yourthreadslink: "Your Threads"

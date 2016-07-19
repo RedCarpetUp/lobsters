@@ -18,6 +18,7 @@ fr:
   layouts:
     application:
       homelink: "Accueil"
+      joblink: "Emplois"
       recentlink: "Récents"
       commentslink: "Commentaires"
       yourthreadslink: "Vos sujets"

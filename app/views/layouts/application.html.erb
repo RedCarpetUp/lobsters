@@ -62,6 +62,8 @@
 
         <% links.merge!({ "/search" => t('.searchlink') }) %>
 
+        <% links.merge!({ "/jobs" => t('.joblink') }) %>
+
         <% if @cur_url.present? && !links.keys.include?(@cur_url) &&
         @heading.present? %>
           <span id="headertitle">
@@ -74,10 +76,6 @@
             <a href="<%= u %>" <%= u == @cur_url ? raw("class=\"cur_url\"") :
               "" %>><%= v %></a>
           <% end %>
-        </span>
-
-        <span class="headerlinks">
-          <%= link_to "Jobs", jobs_path %>
         </span>
 
       </div>
