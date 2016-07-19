@@ -3,17 +3,20 @@ class JobsController < ApplicationController
   before_action :set_job, only: [:edit, :update, :show, :destroy]
   before_action :require_same_user, only: [:edit, :update, :destroy]
   before_action :require_same_user_from_name, only: [:user_applied_jobs, :user_jobs]
- 
+
   def show
+    @title = @job.title
   end
 
   def index
     @cur_url = "/jobs"
+    @title = "Jobs"
     @jobs = Job.all
   end
 
   def new
     @job = Job.new
+    @title = "New Job"
   end
 
   def create
@@ -29,6 +32,7 @@ class JobsController < ApplicationController
   end
 
   def edit
+    @title = "Edit Job"
   end
 
   def update
@@ -49,10 +53,12 @@ class JobsController < ApplicationController
 
   def user_jobs
     @user_jobs = current_user.jobs
+    @title = "Jobs"
   end
 
   def user_applied_jobs
     @user_applications = Job.where(id: current_user.applications.pluck(:job_id).uniq)
+    @title = "Jobs"
   end
 
   private

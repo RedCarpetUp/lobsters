@@ -9,9 +9,7 @@ class ApplicationsController < ApplicationController
  
   def change_status
   	if @application.av_status.include?(params[:status].to_s)
-    logger.debug {"XXXXXXXXXXXXXCXXXXXXXXX: #{@application.to_yaml}"}
       @application.status = params[:status].to_s
-    logger.debug {"XXXXXXXXXXXXXCXXXXXXXXX: #{@application.to_yaml}"}
       if @application.save
         flash[:success] = "Status updated successfully"
         redirect_to job_application_path(@job, @application)
@@ -26,13 +24,16 @@ class ApplicationsController < ApplicationController
   end
 
   def show
+    @title = @application.name
   end
 
   def index
     @applications = @job.applications
+    @title = "Applications"
   end
 
   def new
+    @title = "New Application"
     @application = Application.new
     @application.name = current_user.username
     @application.email = current_user.email
@@ -53,6 +54,7 @@ class ApplicationsController < ApplicationController
   end
 
   def edit
+    @title = "Edit Application"
   end
 
   def update
