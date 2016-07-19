@@ -4,11 +4,37 @@
   </div>
 <% end %>
 
+<div class="box">
+<%= form_tag jobs_path, method: :get do %>
+  <div class="form-group">
+    <%= text_field_tag :query, params[:query] %>
+    <%= submit_tag 'Search' %>
+  </div>
+<% end %>
+<br>
+</div>
+
 <ol class="stories list">
   <%= render :partial => "jobs/listitem", :collection => @jobs,
     :as => :job %>
 </ol>
+<% if params[:query] %>
+<div class="morelink">
+  <% if @page && @page > 1 %>
+    <a href="/jobs<%= @page == 2 ? "" : "/page/#{@page - 1}" %>?utf8=✓&query=<%= params[:query] %>&commit=Search">&lt;&lt; 
+      Page <%= @page - 1 %></a>
+  <% end %>
 
+  <% if @jobs.count == 20 %>
+    <% if @page && @page > 1 %>
+      |
+    <% end %>
+
+    <a href="/jobs/page/<%= @page + 1 %>?utf8=✓&query=<%= params[:query] %>&commit=Search">Page
+      <%= @page + 1 %> &gt;&gt;</a>
+  <% end %>
+</div>
+<% else %>
 <div class="morelink">
   <% if @page && @page > 1 %>
     <a href="/jobs<%= @page == 2 ? "" : "/page/#{@page - 1}" %>">&lt;&lt; 
@@ -24,3 +50,4 @@
       <%= @page + 1 %> &gt;&gt;</a>
   <% end %>
 </div>
+<% end %>

@@ -13,14 +13,20 @@ class JobsController < ApplicationController
 
   def index
 
+    @cur_url = "/jobs"
+    @title = "Jobs"
+
     @page = 1
     if params[:page].to_i > 0
       @page = params[:page].to_i
     end
 
-    @cur_url = "/jobs"
-    @title = "Jobs"
-    @jobs = Job.all.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    if params[:query].present?
+      @jobs = Job.all.search(params[:query]).records.last((@jobs = Job.all.search(params[:query]).count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
+    else
+      @jobs = Job.all.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    end
+
   end
 
   def new

@@ -1,4 +1,5 @@
 class Job < ActiveRecord::Base
+  searchkick
   belongs_to :poster, class_name: "User"
   has_many :applications
 
