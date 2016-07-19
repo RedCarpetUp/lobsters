@@ -156,6 +156,11 @@ Lobsters::Application.routes.draw do
     get "/u/jobs/:username" => "jobs#user_jobs", :as => "user_jobs"
     get "/u/applications/:username" => "jobs#user_applied_jobs", :as => "user_applications"
 
+    get "/u/jobs/:username/page/:page" => "jobs#user_jobs"
+    get "/u/applications/:username/page/:page" => "jobs#user_applied_jobs"
+
+    get 'jobs/page/:page' => 'jobs#index'
+
 
   end
 end

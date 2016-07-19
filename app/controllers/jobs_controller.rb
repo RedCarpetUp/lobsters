@@ -3,15 +3,24 @@ class JobsController < ApplicationController
   before_action :set_job, only: [:edit, :update, :show, :destroy]
   before_action :require_same_user, only: [:edit, :update, :destroy]
   before_action :require_same_user_from_name, only: [:user_applied_jobs, :user_jobs]
+  before_action :set_user_from_name, only: [:user_applied_jobs, :user_jobs]
+
+  ITEMS_PER_PAGE = 20
 
   def show
     @title = @job.title
   end
 
   def index
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
     @cur_url = "/jobs"
     @title = "Jobs"
-    @jobs = Job.all
+    @jobs = Job.all.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
   end
 
   def new
@@ -52,12 +61,24 @@ class JobsController < ApplicationController
   end
 
   def user_jobs
-    @user_jobs = current_user.jobs
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
+    @user_jobs = current_user.jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     @title = "Jobs"
   end
 
   def user_applied_jobs
-    @user_applications = Job.where(id: current_user.applications.pluck(:job_id).uniq)
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
+    @user_applications = Job.where(id: current_user.applications.pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     @title = "Jobs"
   end
 
@@ -79,6 +100,10 @@ class JobsController < ApplicationController
         flash[:error] = 'You don\'t have permission for this action '
         redirect_to job_path
       end
+    end
+
+    def set_user_from_name
+      @name_user = User.where(:username => params[:username]).first
     end
 
     def job_params

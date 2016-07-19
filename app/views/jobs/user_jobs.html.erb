@@ -9,3 +9,19 @@
   <%= render :partial => "jobs/listitem", :collection => @user_jobs,
     :as => :job %>
 </ol>
+
+<div class="morelink">
+  <% if @page && @page > 1 %>
+    <a href="/u/jobs/<%= @name_user.username %><%= @page == 2 ? "" : "/page/#{@page - 1}" %>">&lt;&lt; 
+      Page <%= @page - 1 %></a>
+  <% end %>
+
+  <% if @user_jobs.count == 20 %>
+    <% if @page && @page > 1 %>
+      |
+    <% end %>
+
+    <a href="/u/jobs/<%= @name_user.username %>/page/<%= @page + 1 %>">Page
+      <%= @page + 1 %> &gt;&gt;</a>
+  <% end %>
+</div>
