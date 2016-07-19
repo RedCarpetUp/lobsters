@@ -7,8 +7,12 @@
     <%= link_to "Delete", @job, method: :delete, data: { confirm: 'Are You Sure?' }, :style => "color:#888;text-decoration:none;" %>
 <% end %>
 
-<% if current_user != @job.poster %>
+<% if (current_user != @job.poster)&&(!@job.applications.pluck(:applicant_id).include?(current_user.id)) %>
  <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+<% end %>
+
+<% if @job.applications.pluck(:applicant_id).include?(current_user.id) %>
+ <%= link_to "SEE YOUR APPLICATION", job_application_path(@job, Application.where(:applicant_id => current_user.id, :job_id => @job.id).first), :style => "float:right;" %>
 <% end %>
 
 <% if user_signed_in? && current_user == @job.poster %>

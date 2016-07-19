@@ -1,3 +1,9 @@
+<% if user_signed_in? %>
+  <div class="box">
+      <h4><%= link_to "Jobs posted by you" , user_jobs_path(current_user.username)  %>&nbsp&nbsp&nbsp&nbsp<%= link_to "Jobs you have applied for" , user_applications_path(current_user.username)  %></h4>
+  </div>
+<% end %>
+
 <ol class="stories list">
   <%= render :partial => "jobs/listitem", :collection => @jobs,
     :as => :job %>

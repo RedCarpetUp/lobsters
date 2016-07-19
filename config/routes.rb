@@ -153,6 +153,9 @@ Lobsters::Application.routes.draw do
 
     post '/jobs/:job_id/applications/:id/change_status/:status' => "applications#change_status", :as => "change_status_job_application"
 
+    get "/u/jobs/:username" => "jobs#user_jobs", :as => "user_jobs"
+    get "/u/applications/:username" => "jobs#user_applied_jobs", :as => "user_applications"
+
 
   end
 end

@@ -2,6 +2,7 @@ class JobsController < ApplicationController
   before_action :require_user, only: [:edit, :update, :destroy, :new, :create]
   before_action :set_job, only: [:edit, :update, :show, :destroy]
   before_action :require_same_user, only: [:edit, :update, :destroy]
+  before_action :require_same_user_from_name, only: [:user_applied_jobs, :user_jobs]
  
   def show
   end
@@ -46,6 +47,14 @@ class JobsController < ApplicationController
     redirect_to jobs_path
   end
 
+  def user_jobs
+    @user_jobs = current_user.jobs
+  end
+
+  def user_applied_jobs
+    @user_applications = Job.where(id: current_user.applications.pluck(:job_id).uniq)
+  end
+
   private
 
     def set_job
@@ -55,6 +64,13 @@ class JobsController < ApplicationController
     def require_same_user
       if current_user != @job.poster
         flash[:error] = 'You can only edit jobs you have posted'
+        redirect_to job_path
+      end
+    end
+
+    def require_same_user_from_name
+      if current_user.username != params[:username]
+        flash[:error] = 'You don\'t have permission for this action '
         redirect_to job_path
       end
     end

@@ -1,0 +1,11 @@
+<div class="box">
+
+<div class="legend">
+  Jobs you have posted
+</div>
+</div>
+
+<ol class="stories list">
+  <%= render :partial => "jobs/listitem", :collection => @user_jobs,
+    :as => :job %>
+</ol>
