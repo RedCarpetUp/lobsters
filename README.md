@@ -101,6 +101,10 @@ in a `config/initializers/production.rb` or similar file:
           created user: test, password: test
           created tag: test
 
+* To enable people to apply for a job without signing up, set anon_apply to true in config/appication.rb:
+          
+              config.anon_apply = true
+
 * Run the Rails server in development mode.  You should be able to login to
 `http://localhost:3000` with your new `test` user:
 

@@ -31,7 +31,7 @@ module Lobsters
 
     config.cache_store = :file_store, "#{config.root}/tmp/cache/"
 
-    config.anon_apply = true
+    config.anon_apply = false
   end
 end
 
