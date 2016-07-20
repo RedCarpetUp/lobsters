@@ -20,7 +20,11 @@
     <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
   <% end %>
 <% else %>
-  <% if (!user_signed_in?)&&(current_user != @job.poster)&&(!@job.applications.pluck(:applicant_id).include?(current_user.id))&&(!@job.collaborators.include?(current_user)) %>
+  <% if user_signed_in? %>
+    <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user))&&(!@job.applications.pluck(:applicant_id).include?(current_user.id)) %>
+      <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+    <% end %>
+  <% else %>
     <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
   <% end %>
 <% end %>
