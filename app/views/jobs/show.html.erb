@@ -7,8 +7,22 @@
     <%= link_to "Delete", @job, method: :delete, data: { confirm: 'Are You Sure?' }, :style => "color:#888;text-decoration:none;" %>
 <% end %>
 
-<% if (!user_signed_in?)&&(current_user != @job.poster)&&(!@job.applications.pluck(:applicant_id).include?(current_user.id))&&(!@job.collaborators.include?(current_user)) %>
- <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+
+<% if Rails.application.config.anon_apply == true %>
+  <% if user_signed_in? %>
+    <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user)) %>
+    <% # A side effect of allowing anonymous applying is tht now show button will be shown to a user even if he has already applied %>
+      <% #!@job.applications.pluck(:applicant_id).include?(current_user.id) %>    
+        <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+      <% #end %>
+    <% end %>
+  <% else %>
+    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+  <% end %>
+<% else %>
+  <% if (!user_signed_in?)&&(current_user != @job.poster)&&(!@job.applications.pluck(:applicant_id).include?(current_user.id))&&(!@job.collaborators.include?(current_user)) %>
+    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+  <% end %>
 <% end %>
 
 <% if user_signed_in? && @job.applications.pluck(:applicant_id).include?(current_user.id) %>

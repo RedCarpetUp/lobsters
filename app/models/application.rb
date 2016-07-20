@@ -2,8 +2,10 @@ class Application < ActiveRecord::Base
   belongs_to :job
   belongs_to :applicant, class_name: "User"
 
-  validates :applicant_id, presence: true
-  validates :applicant_id, uniq_app: true, if: :is_new?
+  if Rails.application.config.anon_apply != true
+    validates :applicant_id, presence: true
+    validates :applicant_id, uniq_app: true, if: :is_new?
+  end
   validates :job_id, presence: true
   validates_length_of :name, :in => 3..60
   validates :name, presence: true

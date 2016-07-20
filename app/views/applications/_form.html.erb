@@ -10,6 +10,10 @@
   Apply for this job
 </div>
 
+<% if @application.new_record? && (Rails.application.config.anon_apply == true) %>
+	<p>If you apply without an account, you won\'t be able to view or edit your application later</p>
+<% end %>
+
 <div class="boxline">
 <%= f.label :name, :class => "required" %>
 <%= f.text_field :name, :maxlength => 100 %>

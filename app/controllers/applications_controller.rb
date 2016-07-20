@@ -1,10 +1,15 @@
 class ApplicationsController < ApplicationController
-  before_action :require_user
+  if Rails.application.config.anon_apply == true
+    before_action :require_user, except: [:new, :create]
+  else
+    before_action :require_user
+  end
+
   before_action :set_job
   before_action :set_application, only: [:edit, :update, :show, :destroy, :change_status]
   before_action :require_same_user, only: [:edit, :update, :destroy]
   before_action :require_poster_or_collab, only: [:change_status]
-  before_action :require_poster_collab_or_applicant, only: [:show, :index]
+  before_action :require_poster_or_collab_or_applicant, only: [:show, :index]
   before_action :require_not_poster_or_collab, only: [:new, :create]
  
   def change_status
@@ -35,19 +40,27 @@ class ApplicationsController < ApplicationController
   def new
     @title = "New Application"
     @application = Application.new
-    @application.name = current_user.username
-    @application.email = current_user.email
+    if Rails.application.config.anon_apply != true
+      @application.name = current_user.username
+      @application.email = current_user.email
+    end
   end
 
   def create
     @application = Application.new(application_params)
-    @application.applicant = current_user
+    if Rails.application.config.anon_apply != true
+      @application.applicant = current_user
+    end
     @application.job = Job.find(params[:job_id])
     @application.status = "Applied"
 
     if @application.save
       flash[:success] = "Application Created!"
-      redirect_to job_application_path(@job, @application)
+      if Rails.application.config.anon_apply == true
+        redirect_to job_path(@job)
+      else
+        redirect_to job_application_path(@job, @application)
+      end
     else
       render :new
     end
@@ -105,10 +118,20 @@ class ApplicationsController < ApplicationController
     end
 
     def require_not_poster_or_collab
-      if (@job.collaborators.include?(current_user))&&(current_user == @job.poster)
-          flash[:error] = 'You are not allowed to apply to your own job'
-          redirect_to job_path(@job)
-      end 
+      if Rails.application.config.anon_apply == true
+        if user_signed_in?
+          if (@job.collaborators.include?(current_user))&&(current_user == @job.poster)
+              flash[:error] = 'You are not allowed to apply to your own job'
+              redirect_to job_path(@job)
+          end 
+        end
+      else
+        if (@job.collaborators.include?(current_user))&&(current_user == @job.poster)
+            flash[:error] = 'You are not allowed to apply to your own job'
+            redirect_to job_path(@job)
+        end 
+      end
+
     end
 
     def application_params
