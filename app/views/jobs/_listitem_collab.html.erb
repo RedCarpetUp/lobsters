@@ -1,0 +1,10 @@
+<tr>
+<td>
+<span class="link">
+    <%= link_to user_path(collab.username) do %>
+      <%= collab.username %>
+    <% end %>
+</span>
+</td>
+<td><%= link_to "REMOVE", rem_collab_path(@job, collab.id), method: :post, data: { confirm: 'Are You Sure?' } %></td>
+</tr>

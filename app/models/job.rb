@@ -3,6 +3,8 @@ class Job < ActiveRecord::Base
   belongs_to :poster, class_name: "User"
   has_many :applications
 
+  has_and_belongs_to_many :collaborators, :join_table => :collabjobs_collaborators, foreign_key: "collaborator_id", class_name: "User", association_foreign_key: "collabjob_id"
+
   validates :poster_id, presence: true
   validates_length_of :title, :in => 3..150
   validates  :title, presence: true

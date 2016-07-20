@@ -1,0 +1,18 @@
+<div class="box">
+
+<div class="legend">
+  Add collaborator
+</div>
+<p>Users you add as collaborators will be able to edit, delete this job posting as well as see applications and change their statuses</p>
+<p>Enter the unique username of the user you want to add as collaborator here</p><br>
+</div>
+
+<div class="box">
+<%= form_tag add_collab_to_rel_path, method: :post do %>
+  <div class="form-group">
+    <%= text_field_tag :name, params[:name] %>
+    <%= submit_tag 'Add' %>
+  </div>
+<% end %>
+<br>
+</div>

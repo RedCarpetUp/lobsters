@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :jobs, foreign_key: "poster_id"
   has_many :applications, foreign_key: "applicant_id"
+
+  has_and_belongs_to_many :collabjobs, :join_table => :collabjobs_collaborators, foreign_key: "collabjob_id", class_name: "Job", association_foreign_key: "collaborator_id"
+
   has_many :sent_messages,
     :class_name => "Message",
     :foreign_key => "author_user_id"

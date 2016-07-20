@@ -1,0 +1,18 @@
+<div class="box">
+
+<div class="legend">
+  Collaborators
+</div>
+
+<ol class="stories list">
+<table class="appl_table">
+	<tr>
+		<th>Name</th>
+		<th>Action</th>
+	</tr>
+  <%= render :partial => "jobs/listitem_collab", :collection => @collabs_list,
+    :as => :collab %>
+</table>
+</ol>
+
+</div>

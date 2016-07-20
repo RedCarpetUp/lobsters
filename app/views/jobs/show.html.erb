@@ -1,24 +1,28 @@
 <div class="box">
 <h2 style="margin-bottom:5px;"><%= @job.title %></h2>
 
-<% if @job.poster == current_user %>
+<% if (@job.poster == current_user)||(@job.collaborators.include?(current_user)) %>
     <%= link_to "Edit", edit_job_path(@job), :style => "color:#888;text-decoration:none;" %>
   <span style="color: #888;">|</span>
     <%= link_to "Delete", @job, method: :delete, data: { confirm: 'Are You Sure?' }, :style => "color:#888;text-decoration:none;" %>
 <% end %>
 
-<% if (current_user != @job.poster)&&(!@job.applications.pluck(:applicant_id).include?(current_user.id)) %>
+<% if (!user_signed_in?)&&(current_user != @job.poster)&&(!@job.applications.pluck(:applicant_id).include?(current_user.id))&&(!@job.collaborators.include?(current_user)) %>
  <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
 <% end %>
 
-<% if @job.applications.pluck(:applicant_id).include?(current_user.id) %>
+<% if user_signed_in? && @job.applications.pluck(:applicant_id).include?(current_user.id) %>
  <%= link_to "SEE YOUR APPLICATION", job_application_path(@job, Application.where(:applicant_id => current_user.id, :job_id => @job.id).first), :style => "float:right;" %>
 <% end %>
 
-<% if user_signed_in? && current_user == @job.poster %>
+<% if user_signed_in? && ((current_user == @job.poster)||(@job.collaborators.include?(current_user))) %>
   <div class="box" style="float:right;">
    <h3>No of applications: <%= @job.applications.count %></h3>
-   <%= link_to "SEE APPLICATIONS", job_applications_path(@job) %>
+   <%= link_to "SEE APPLICATIONS", job_applications_path(@job) %><br>
+   <%= link_to "Add Collaborator", add_collab_path(@job) %>
+   <% if user_signed_in? && (current_user == @job.poster) %>
+     <br><%= link_to "Collaborators list", job_collabs_path(@job) %>
+   <% end %>  
   </div>
 <% end %>
 

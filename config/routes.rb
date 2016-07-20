@@ -159,7 +159,15 @@ Lobsters::Application.routes.draw do
     get "/u/jobs/:username/page/:page" => "jobs#user_jobs"
     get "/u/applications/:username/page/:page" => "jobs#user_applied_jobs"
 
-    get 'jobs/page/:page' => 'jobs#index'
+    get '/jobs/page/:page' => 'jobs#index'
+
+    get '/jobs/:id/add_collab' => "jobs#add_collaborator", :as => "add_collab"
+    post '/jobs/:id/add_collab' => "jobs#add_collaborator_to_rel", :as => "add_collab_to_rel"
+
+    get '/jobs/:id/collaborators' => "jobs#job_collabs_list", :as => "job_collabs"
+    post '/jobs/:id/collaborators/:rem_id' => "jobs#remove_collab", :as => "rem_collab"
+
+
 
 
   end

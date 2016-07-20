@@ -3,9 +3,9 @@ class ApplicationsController < ApplicationController
   before_action :set_job
   before_action :set_application, only: [:edit, :update, :show, :destroy, :change_status]
   before_action :require_same_user, only: [:edit, :update, :destroy]
-  before_action :require_poster, only: [:change_status]
-  before_action :require_poster_or_applicant, only: [:show, :index]
-  before_action :require_not_poster, only: [:new, :create]
+  before_action :require_poster_or_collab, only: [:change_status]
+  before_action :require_poster_collab_or_applicant, only: [:show, :index]
+  before_action :require_not_poster_or_collab, only: [:new, :create]
  
   def change_status
   	if @application.av_status.include?(params[:status].to_s)
@@ -90,22 +90,22 @@ class ApplicationsController < ApplicationController
       end
     end
 
-    def require_poster
-    	if current_user != @job.poster
+    def require_poster_or_collab
+    	if (!@job.collaborators.include?(current_user))&&(current_user != @job.poster)
         	flash[:error] = 'You are not allowed to do this action'
         	redirect_to job_path(@job)
     	end
     end
 
-    def require_poster_or_applicant
-    	if (current_user != @job.poster) and (current_user != @application.applicant)
+    def require_poster_or_collab_or_applicant
+    	if (current_user != @job.poster) and (current_user != @application.applicant) and (!@job.collaborators.include?(current_user))
         	flash[:error] = 'You are not allowed to see applications'
         	redirect_to job_path(@job)
     	end 
     end
 
-    def require_not_poster
-      if current_user == @job.poster
+    def require_not_poster_or_collab
+      if (@job.collaborators.include?(current_user))&&(current_user == @job.poster)
           flash[:error] = 'You are not allowed to apply to your own job'
           redirect_to job_path(@job)
       end 
