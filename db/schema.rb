@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160721030025) do
+ActiveRecord::Schema.define(version: 20160721031024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20160721030025) do
     t.datetime "updated_at"
     t.integer  "job_id"
     t.integer  "applicant_id"
+    t.text     "raw_details"
   end
 
   create_table "collabjobs_collaborators", id: false, force: true do |t|

@@ -11,8 +11,8 @@ class Application < ActiveRecord::Base
   validates :name, presence: true
   validates :email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ }, presence: true
   validates :phoneno, presence: true, length: { is: 10 }, format: { with: /(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/ }, presence: true
-  validates_length_of :details, :maximum => (64 * 1024)
-  validates :details, presence: true
+  validates_length_of :details_nomark, :maximum => (64 * 1024)
+  validates :details_nomark, presence: true
   validates_inclusion_of :status, :in => ["Shortlisted", "Applied", "Rejected", "Hired" ]
   validates :status, presence: true
 
@@ -32,6 +32,19 @@ class Application < ActiveRecord::Base
       return []
     end
         
+  end
+
+  def details_nomark=(des)
+    self[:raw_details] = des.to_s.rstrip
+    self.details = self.generated_markeddown_details
+  end
+
+  def details_nomark
+    self[:raw_details]
+  end
+
+  def generated_markeddown_details
+    Markdowner.to_html(self.details_nomark, { :allow_images => true })
   end
   
 end

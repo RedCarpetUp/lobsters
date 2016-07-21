@@ -135,7 +135,7 @@ class ApplicationsController < ApplicationController
     end
 
     def application_params
-      params.require(:application).permit(:name, :email, :phoneno, :details, :status)
+      params.require(:application).permit(:name, :email, :phoneno, :details_nomark, :status)
     end
     
 end
