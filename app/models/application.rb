@@ -1,6 +1,7 @@
 class Application < ActiveRecord::Base
   belongs_to :job
   belongs_to :applicant, class_name: "User"
+  has_many :collcomments
 
   if Rails.application.config.anon_apply != true
     validates :applicant_id, presence: true

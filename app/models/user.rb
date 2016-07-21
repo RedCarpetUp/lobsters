@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :stories,
     -> { includes :user }
   has_many :comments
+  has_many :collcomments
   has_many :jobs, foreign_key: "poster_id"
   has_many :applications, foreign_key: "applicant_id"
 

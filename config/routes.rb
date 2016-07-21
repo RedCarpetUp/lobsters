@@ -148,7 +148,9 @@ Lobsters::Application.routes.draw do
     end
 
     resources :jobs do
-      resources :applications
+      resources :applications do
+        resources :collcomments, :only => [:create]
+      end
     end
 
     post '/jobs/:job_id/applications/:id/change_status/:status' => "applications#change_status", :as => "change_status_job_application"

@@ -1,0 +1,14 @@
+<br>
+<div class="box">
+<h3><%= @collcomments.count %>&nbsp<%= "comment".pluralize(@collcomments.count) %></h3>
+
+<%= form_for([@job, @application, @collcomment]) do |f| %>
+  <%= f.text_area :body, :rows => "3", :placeholder => "Write a comment" %>
+  <br>
+  <%= f.submit("Post") %>
+<% end %>
+<br>
+
+<%= render :partial => 'collcomments/comm', :collection => @collcomments %>
+
+</div>

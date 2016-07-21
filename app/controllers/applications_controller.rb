@@ -30,6 +30,8 @@ class ApplicationsController < ApplicationController
 
   def show
     @title = @application.name
+    @collcomment = Collcomment.new
+    @collcomments = @application.collcomments.all.order("created_at").reverse_order
   end
 
   def index
