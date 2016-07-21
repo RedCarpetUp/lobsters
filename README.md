@@ -105,7 +105,6 @@ in a `config/initializers/production.rb` or similar file:
           
               config.anon_apply = true
 
-In this case create a migration to remove applicant_id column from applications table.
 This should not be altered once app is setup.
 
 * Run the Rails server in development mode.  You should be able to login to
