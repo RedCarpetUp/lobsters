@@ -12,13 +12,24 @@ class Job < ActiveRecord::Base
   validates  :company_name, presence: true
   validates_length_of :intro, :in => 3..150
   validates  :intro, presence: true
-  validates_length_of :desc, :maximum => (64 * 1024), :minimum => 140
-  validates  :desc, presence: true
-  validates_length_of :skills_reqs, :maximum => (64 * 1024)
-  validates_length_of :about_company, :maximum => (64 * 1024)
+  validates_length_of :desc_nomark, :maximum => (64 * 1024), :minimum => 140
+  validates  :desc_nomark, presence: true
   validates_length_of :req_subs, :in => 3..150
   validates  :req_subs, presence: true
   validates_length_of :location, :in => 3..60
   validates :pay, numericality: { only_integer: true }
+
+  def desc_nomark=(des)
+    self[:raw_desc] = des.to_s.rstrip
+    self.desc = self.generated_markeddown_desc
+  end
+
+  def desc_nomark
+    self[:raw_desc]
+  end
+
+  def generated_markeddown_desc
+    Markdowner.to_html(self.desc_nomark, { :allow_images => true })
+  end
 
 end

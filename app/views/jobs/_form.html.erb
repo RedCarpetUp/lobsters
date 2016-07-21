@@ -32,23 +32,9 @@
 <br>
 
 <div class="boxline">
-<%= f.label :desc, "Description", :class => "required" %>
-<%= f.text_area :desc, :style => "width: 709px !important;", :rows => 5 %>
+<%= f.label :desc_nomark, "Description", :class => "required" %>
+<%= f.text_area :desc_nomark, :style => "width: 709px !important;", :rows => 5 %>
 <div class="hintblock">Give a brief description of the job, what it entails, about your company, tasks etc</div>
-</div>
-<br>
-
-<div class="boxline">
-<%= f.label :skills_reqs, "Skills Required", :class => "required" %>
-<%= f.text_area :skills_reqs, :style => "width: 709px !important;", :rows => 5 %>
-<div class="hintblock">Leave this empty if you have already mentioned this in description field above</div>
-</div>
-<br>
-
-<div class="boxline">
-<%= f.label :about_company, :class => "required" %>
-<%= f.text_area :about_company, :style => "width: 709px !important;", :rows => 5 %>
-<div class="hintblock">Leave this empty if you have already mentioned this in description field above</div>
 </div>
 <br>
 
@@ -77,7 +63,21 @@
 
 <div class="box">
 <div class="boxline actions">
-<%= f.submit(@job.new_record? ? 'Create' : 'Edit') %>
+
+      <div class="box">
+        <div class="boxline actions markdown_help_toggler">
+          <div class="markdown_help_label">
+            Markdown formatting available
+          </div>
+
+          <%= f.submit(@job.new_record? ? 'Create' : 'Edit') %>
+
+          <div style="clear: both;"></div>
+
+          <%= render :partial => "global/markdownhelp",
+            :locals => { :allow_images => true } %>
+        </div>
+      </div>
 </div>
 </div>
 

@@ -48,18 +48,9 @@
 <h4 style="color: grey;"><%= @job.intro %></h4>
 
 <h3>Description</h3>
-<%= @job.desc %>
-
-<% if !@job.skills_reqs.blank? %>
-<h3>Required Skills</h3>
-<% end %>
-
-<p><%= @job.skills_reqs %></p>
-<% if !@job.skills_reqs.blank? %>
-<h3>About the Company</h3>
-<% end %>
-
-<p><%= @job.about_company %></p>
+<div class="story_text">
+  <%= raw @job.desc %>
+</div>
 
 <h3>Location</h3>
 <p><%= @job.location %></p>
