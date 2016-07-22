@@ -5,6 +5,8 @@ class ApplicationsController < ApplicationController
     before_action :require_user
   end
 
+  ITEMS_PER_PAGE = 20
+
   before_action :set_job
   before_action :set_application, only: [:edit, :update, :show, :destroy, :change_status]
   before_action :require_same_user, only: [:edit, :update, :destroy]
@@ -29,9 +31,16 @@ class ApplicationsController < ApplicationController
   end
 
   def show
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
     @title = @application.name
     @collcomment = Collcomment.new
-    @collcomments = @application.collcomments.where(is_deleted: false).order("created_at").reverse_order
+    @collcomments_count = @application.collcomments.where(is_deleted: false).count
+    @collcomments = @application.collcomments.where(is_deleted: false).order("created_at").reverse_order.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
   end
 
   def index

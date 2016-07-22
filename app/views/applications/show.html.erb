@@ -32,5 +32,19 @@
 
 <% if (@job.poster == current_user)||(@job.collaborators.include?(current_user)) %>
 <%= render 'collcomments/commcard' %>
+<div class="morelink">
+  <% if @page && @page > 1 %>
+    <a href="/jobs/<%= params[:job_id] %>/applications/<%= params[:id] %><%= @page == 2 ? "" : "/page/#{@page - 1}" %>">&lt;&lt; 
+      Page <%= @page - 1 %></a>
+  <% end %>
+
+  <% if @collcomments.count == 20 %>
+    <% if @page && @page > 1 %>
+      |
+    <% end %>
+
+    <a href="/jobs/<%= params[:job_id] %>/applications/<%= params[:id] %>/page/<%= @page + 1 %>">Page
+      <%= @page + 1 %> &gt;&gt;</a>
+  <% end %>
 </div>
 <% end %>

@@ -169,7 +169,7 @@ Lobsters::Application.routes.draw do
     get '/jobs/:id/collaborators' => "jobs#job_collabs_list", :as => "job_collabs"
     post '/jobs/:id/collaborators/:rem_id' => "jobs#remove_collab", :as => "rem_collab"
 
-
+    get "/jobs/:job_id/applications/:id/page/:page" => "applications#show"
 
 
   end
