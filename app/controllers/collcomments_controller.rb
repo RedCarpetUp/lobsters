@@ -8,6 +8,7 @@ class CollcommentsController < ApplicationController
     @collcomment = Collcomment.new(collcomment_params)
     @collcomment.application = @application
     @collcomment.user = current_user
+    @collcomment.is_deleted = false
     if @collcomment.save
       flash[:success] = "Comment Posted"
       redirect_to job_application_path(@job, @application)
@@ -20,7 +21,7 @@ class CollcommentsController < ApplicationController
   private
 
     def set_job
-      @job = Job.find(params[:job_id])
+      @job = Job.where(is_deleted: false).find(params[:job_id])
     end
 
     def set_application

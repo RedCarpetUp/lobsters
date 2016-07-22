@@ -31,11 +31,11 @@ class ApplicationsController < ApplicationController
   def show
     @title = @application.name
     @collcomment = Collcomment.new
-    @collcomments = @application.collcomments.all.order("created_at").reverse_order
+    @collcomments = @application.collcomments.where(is_deleted: false).order("created_at").reverse_order
   end
 
   def index
-    @applications = @job.applications
+    @applications = @job.applications.where(is_deleted: false)
     @title = "Applications"
   end
 
@@ -55,6 +55,7 @@ class ApplicationsController < ApplicationController
     end
     @application.job = Job.find(params[:job_id])
     @application.status = "Applied"
+    @application.is_deleted = false
 
     if @application.save
       flash[:success] = "Application Created!"
@@ -83,7 +84,8 @@ class ApplicationsController < ApplicationController
 
   def destroy
     tempjob = @application.job
-    @application.destroy
+    @application.is_deleted = true
+    @application.save
     flash[:success] = 'Application Deleted'
     redirect_to job_path(tempjob)
   end
@@ -91,11 +93,11 @@ class ApplicationsController < ApplicationController
   private
 
     def set_application
-      @application = Application.find(params[:id])
+      @application = Application.where(is_deleted: false).find(params[:id])
     end
 
     def set_job
-      @job = Job.find(params[:job_id])
+      @job = Job.where(is_deleted: false).find(params[:job_id])
     end
 
     def require_same_user

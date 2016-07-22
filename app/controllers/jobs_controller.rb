@@ -23,9 +23,9 @@ class JobsController < ApplicationController
     end
 
     if params[:query].present?
-      @jobs = Job.all.search(params[:query]).records.last((@jobs = Job.all.search(params[:query]).count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
+      @jobs = Job.where(is_deleted: false).search(params[:query]).records.last((@jobs = Job.all.search(params[:query]).count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
     else
-      @jobs = Job.all.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+      @jobs = Job.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     end
 
   end
@@ -38,6 +38,7 @@ class JobsController < ApplicationController
   def create
     @job = Job.new(job_params)
     @job.poster = current_user
+    @job.is_deleted = false
 
     if @job.save
       flash[:success] = "Job Created!"
@@ -62,7 +63,8 @@ class JobsController < ApplicationController
 
   def destroy
     tempuser = @job.user
-    @job.destroy
+    @job.is_deleted = true
+    @job.save
     flash[:success] = 'Job Deleted'
     redirect_to jobs_path
   end
@@ -85,7 +87,7 @@ class JobsController < ApplicationController
       @page = params[:page].to_i
     end
 
-    @user_applications = Job.where(id: current_user.applications.pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    @user_applications = Job.where(is_deleted: false).where(id: current_user.applications.pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     @title = "Jobs"
   end
 
@@ -146,7 +148,7 @@ class JobsController < ApplicationController
   private
 
     def set_job
-      @job = Job.find(params[:id])
+      @job = Job.where(is_deleted: false).find(params[:id])
     end
 
     def require_same_or_collab_user
