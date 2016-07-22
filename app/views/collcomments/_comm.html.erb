@@ -1,5 +1,5 @@
 <div style="width:75%">
 <h4 style="margin-bottom:0px !important;margin-top:0px !important;"><%= comm.user.username %></h4>
 <p style="margin-bottom:0px !important;margin-top:0px !important;float:right;"><%= time_ago_in_words(comm.created_at) %> ago</p>
-<p style="margin-top:0px !important;white-space: pre-wrap;"><%= comm.body %></p>
+<p style="margin-top:0px !important;white-space: pre-wrap;"><%= raw comm.body %></p>
 </div>

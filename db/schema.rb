@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160721153214) do
+ActiveRecord::Schema.define(version: 20160722220726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20160721153214) do
     t.integer  "job_id"
     t.integer  "applicant_id"
     t.text     "raw_details"
+    t.boolean  "is_deleted"
   end
 
   create_table "collabjobs_collaborators", id: false, force: true do |t|
@@ -40,6 +41,8 @@ ActiveRecord::Schema.define(version: 20160721153214) do
     t.datetime "updated_at"
     t.integer  "application_id"
     t.integer  "user_id"
+    t.text     "raw_body"
+    t.boolean  "is_deleted"
   end
 
   create_table "comments", force: true do |t|
@@ -123,6 +126,7 @@ ActiveRecord::Schema.define(version: 20160721153214) do
     t.datetime "updated_at"
     t.integer  "poster_id"
     t.text     "raw_desc"
+    t.boolean  "is_deleted"
   end
 
   create_table "keystores", id: false, force: true do |t|

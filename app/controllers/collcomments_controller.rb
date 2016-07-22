@@ -36,7 +36,7 @@ class CollcommentsController < ApplicationController
     end
 
     def collcomment_params
-      params.require(:collcomment).permit(:body)
+      params.require(:collcomment).permit(:body_nomark)
     end
 
 end

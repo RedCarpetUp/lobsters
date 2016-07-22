@@ -148,7 +148,7 @@ class JobsController < ApplicationController
   private
 
     def set_job
-      @job = Job.where(is_deleted: false).find(params[:id])
+      @job = Job.where(:is_deleted => false).find(params[:id])
     end
 
     def require_same_or_collab_user
