@@ -19,6 +19,18 @@ class ApplicationsController < ApplicationController
       @application.status = params[:status].to_s
       if @application.save
         flash[:success] = "Status updated successfully"
+
+          @new_collcomm = Collcomment.new
+          @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{current_user.username} changed the status of this application to #{@application.status}"
+          @new_collcomm.application = @application
+          @new_collcomm.user = @job.poster
+          @new_collcomm.is_deleted = false
+          @new_collcomm.save
+
+        @application.job.collaborators.each do |touser|
+          StatusChange.notify(touser, @application, @job).deliver
+        end
+
         redirect_to job_application_path(@job, @application)
   	  else
         flash[:error] = "Status can't be updated"

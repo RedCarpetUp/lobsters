@@ -1,0 +1,5 @@
+<%= @user.username %> changed the status of application <%= @application.name %> of <%= @job.title %> to : <%= @application.status %>
+
+To discuss this change go to link below:
+
+<%= Rails.application.root_url %>/jobs/<%= @job.id %>/applications/<%= @application.id %>

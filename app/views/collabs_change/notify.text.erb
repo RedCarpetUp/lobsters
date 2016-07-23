@@ -1,0 +1,5 @@
+<%= @user == @changeduser ? "You" : @changeduser.username %> has been <%= @change %> as collaborator in hiring of job <%= @job.title %>.
+
+To discuss this change go to link below:
+
+<%= Rails.application.root_url %>/jobs/<%= @job.id %>

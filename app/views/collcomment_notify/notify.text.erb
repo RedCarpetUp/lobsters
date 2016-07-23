@@ -1,0 +1,5 @@
+<%= @collcomment.user.username %> posted a comment on application <%= @application.name %> for job <%= @job.title %>
+
+To view it, go to the link below:
+
+<%= Rails.application.root_url %>/jobs/<%= @job.id %>/applications/<%= @application.id %>

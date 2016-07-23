@@ -11,6 +11,9 @@ class CollcommentsController < ApplicationController
     @collcomment.is_deleted = false
     if @collcomment.save
       flash[:success] = "Comment Posted"
+      @job.collaborators.each do |touser|
+        CollcommentNotify.notify(@collcomment, @application, @job, touser).deliver
+      end
       redirect_to job_application_path(@job, @application)
     else
       flash[:error] = @collcomment.errors.full_messages.to_sentence.gsub('BodyNomark','Comment').gsub('Body','Comment')

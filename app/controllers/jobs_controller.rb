@@ -112,6 +112,17 @@ class JobsController < ApplicationController
       @job.collaborators << @new_collab_user
       if @job.collaborators.include?(@new_collab_user)
         flash[:success] = 'User added as collaborator successfully!'
+        @job.applications.each do |app|
+          @new_collcomm = Collcomment.new
+          @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{@new_collab_user.username} added as collaborator"
+          @new_collcomm.application = app
+          @new_collcomm.user = @job.poster
+          @new_collcomm.is_deleted = false
+          @new_collcomm.save
+        end
+        @job.collaborators.each do |touser|
+          CollabsChange.notify("added", touser, @new_collab_user, @job).deliver
+        end
         redirect_to job_path(@job)
       else
         flash[:error] = 'User can\'t be added as collaborator'
@@ -137,6 +148,18 @@ class JobsController < ApplicationController
       @job.collaborators.delete(@rem_collab_user)
       if !@job.collaborators.include?(@rem_collab_user)
         flash[:success] = 'User removed from collaborators successfully!'
+        @job.applications.each do |app|
+          @new_collcomm = Collcomment.new
+          @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{@rem_collab_user.username} removed from collaborators"
+          @new_collcomm.application = app
+          @new_collcomm.user = @job.poster
+          @new_collcomm.is_deleted = false
+          @new_collcomm.save
+        end
+        @job.collaborators.each do |touser|
+          CollabsChange.notify("removed", touser, @rem_collab_user, @job).deliver
+        end
+        CollabsChange.notify("removed", @rem_collab_user, @rem_collab_user, @job).deliver
         redirect_to job_collabs_path(@job)
       else
         flash[:error] = 'User can\'t be removed as collaborator'
