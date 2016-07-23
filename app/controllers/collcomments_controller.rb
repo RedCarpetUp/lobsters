@@ -9,6 +9,7 @@ class CollcommentsController < ApplicationController
     @collcomment.application = @application
     @collcomment.user = current_user
     @collcomment.is_deleted = false
+    @collcomment.is_auto = false
     if @collcomment.save
       flash[:success] = "Comment Posted"
       @job.collaborators.each do |touser|

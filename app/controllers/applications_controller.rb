@@ -23,7 +23,7 @@ class ApplicationsController < ApplicationController
           @new_collcomm = Collcomment.new
           @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{current_user.username} changed the status of this application to #{@application.status}"
           @new_collcomm.application = @application
-          @new_collcomm.user = @job.poster
+          @new_collcomm.is_auto = true
           @new_collcomm.is_deleted = false
           @new_collcomm.save
 

@@ -116,7 +116,7 @@ class JobsController < ApplicationController
           @new_collcomm = Collcomment.new
           @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{@new_collab_user.username} added as collaborator"
           @new_collcomm.application = app
-          @new_collcomm.user = @job.poster
+          @new_collcomm.is_auto = true
           @new_collcomm.is_deleted = false
           @new_collcomm.save
         end
@@ -152,7 +152,7 @@ class JobsController < ApplicationController
           @new_collcomm = Collcomment.new
           @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{@rem_collab_user.username} removed from collaborators"
           @new_collcomm.application = app
-          @new_collcomm.user = @job.poster
+          @new_collcomm.is_auto = true
           @new_collcomm.is_deleted = false
           @new_collcomm.save
         end
