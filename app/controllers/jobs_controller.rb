@@ -90,7 +90,7 @@ class JobsController < ApplicationController
       @page = params[:page].to_i
     end
 
-    @user_applications = Job.where(is_deleted: false).where(id: current_user.applications.pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    @user_applications = Job.all.where(is_deleted: false).where(id: current_user.applications.pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     @title = "Jobs"
   end
 

@@ -75,6 +75,10 @@ class ApplicationsController < ApplicationController
     @application = Application.new(application_params)
     if Rails.application.config.anon_apply != true
       @application.applicant = current_user
+    else
+      if user_signed_in?
+        @application.applicant = current_user
+      end
     end
     @application.job = Job.find(params[:job_id])
     @application.status = "Applied"
