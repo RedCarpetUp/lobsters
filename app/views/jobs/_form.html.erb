@@ -25,13 +25,6 @@
 <br>
 
 <div class="boxline">
-<%= f.label :intro, :class => "required" %>
-<%= f.text_field :intro, :maxlength => 100 %>
-<div class="hintblock">Give a one line intro about the job and/or your company</div>
-</div>
-<br>
-
-<div class="boxline">
 <%= f.label :desc_nomark, "Description", :class => "required" %>
 <%= f.text_area :desc_nomark, :style => "width: 709px !important;", :rows => 5 %>
 <div class="hintblock">Give a brief description of the job, what it entails, about your company, tasks etc</div>
@@ -39,23 +32,9 @@
 <br>
 
 <div class="boxline">
-<%= f.label :pay, :class => "required" %>
-<%= f.number_field :pay, :maxlength => 100, :style => "max-width: 95% !important;width: 709px !important;" %>
-<div class="hintblock">Mention the pay package being offered, leave it at 0 if no renumeration is being offered</div>
-</div>
-<br>
-
-<div class="boxline">
 <%= f.label :location, :class => "required" %>
 <%= f.text_field :location, :maxlength => 100 %>
 <div class="hintblock">Mention the location of your company where this job is being offered, mention REMOTE if it is a remote/work-from-home job</div>
-</div>
-<br>
-
-<div class="boxline">
-<%= f.label :req_subs, "Required details", :class => "required" %>
-<%= f.text_field :req_subs, :maxlength => 100 %>
-<div class="hintblock">Give a comma seperated list of the required documents and details that the candidate must submit</div>
 </div>
 <br>
 
