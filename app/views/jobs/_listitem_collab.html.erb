@@ -6,5 +6,11 @@
     <% end %>
 </span>
 </td>
-<td><%= link_to "REMOVE", rem_collab_path(@job, collab.id), method: :post, data: { confirm: 'Are You Sure?' } %></td>
+<td>
+	<% if !@job.is_closed %>
+		<%= link_to "REMOVE", rem_collab_path(@job, collab.id), method: :post, data: { confirm: 'Are You Sure?' } %>
+	<% else %>
+		<em style="color:grey;">ARCHIVED</em>
+	<% end %>
+</td>
 </tr>

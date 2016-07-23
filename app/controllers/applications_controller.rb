@@ -14,6 +14,8 @@ class ApplicationsController < ApplicationController
   before_action :require_poster_or_collab_or_applicant, only: [:show]
   before_action :require_not_poster_or_collab, only: [:new, :create]
  
+  before_action :not_read_only, only:[:change_status, :new, :create, :edit, :update, :destroy]
+
   def change_status
   	if @application.av_status.include?(params[:status].to_s)
       @application.status = params[:status].to_s
@@ -114,11 +116,16 @@ class ApplicationsController < ApplicationController
   private
 
     def set_application
-      @application = Application.where(is_deleted: false).find(params[:id])
+      @application = @job.applications.where(is_deleted: false).find(params[:id])
     end
 
     def set_job
-      @job = Job.where(is_deleted: false).find(params[:job_id])
+      @jobx =  Job.where(:is_deleted => false).find(params[:job_id])
+      if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)
+        @job = @jobx
+      else
+        @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:job_id])
+      end
     end
 
     def require_same_user
@@ -179,4 +186,11 @@ class ApplicationsController < ApplicationController
       params.require(:application).permit(:name, :email, :phoneno, :details_nomark, :status)
     end
     
+    def not_read_only
+      if @job.is_closed == true
+        flash[:error] = 'This job is archived hence can\'t be modified'
+        redirect_to job_path(@job)
+      end
+    end
+
 end

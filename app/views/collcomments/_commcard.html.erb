@@ -2,6 +2,7 @@
 <div class="box">
 <h3><%= @collcomments_count %>&nbsp<%= "comment".pluralize(@collcomments_count) %></h3>
 
+<% if !@job.is_closed %>
 <%= form_for([@job, @application, @collcomment]) do |f| %>
   <%= f.text_area :body_nomark, :rows => "3", :placeholder => "Write a comment" %>
   <br>
@@ -15,6 +16,7 @@
       <%= render :partial => "global/markdownhelp"%>
     </div>
   </div>
+<% end %>
 <% end %>
 <br>
 

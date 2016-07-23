@@ -1,5 +1,5 @@
 <div class="box">
-<h2 style="margin-bottom:5px;">Applicant details</h2>
+<h2 style="margin-bottom:5px;"><%= @job.is_closed ? "[ARCHIVED]" : "" %> Applicant details</h2>
 
 <% if @application.applicant == current_user %>
     <%= link_to "Edit", edit_job_application_path(@job, @application), :style => "color:#888;text-decoration:none;" %>
@@ -10,8 +10,10 @@
 <% if user_signed_in? && current_user == @job.poster %>
   <div class="box" style="float:right;">
     <h3>Current Status: <%= @application.status %></h3>
+    <% if !@job.is_closed %>
     <% @application.av_status.each do |x| %>
       <h4><%= link_to x == "Hired" ? x.upcase.chomp('D') : x.upcase.chomp('ED') , change_status_job_application_path(@job, @application, x), method: :post  %></h4>
+    <% end %>
     <% end %>
   </div>
 <% end %>

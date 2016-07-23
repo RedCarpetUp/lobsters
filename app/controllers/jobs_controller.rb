@@ -1,10 +1,12 @@
 class JobsController < ApplicationController
-  before_action :require_user, only: [:job_collabs_list, :remove_collab, :edit, :update, :destroy, :new, :create, :add_collaborator, :user_applied_jobs, :user_jobs, :add_collaborator, :add_collaborator_to_rel]
-  before_action :set_job, only: [:edit, :update, :show, :destroy, :add_collaborator, :add_collaborator_to_rel, :job_collabs_list, :remove_collab]
-  before_action :require_same_or_collab_user, only: [:edit, :update, :destroy, :add_collaborator, :add_collaborator_to_rel]
+  before_action :require_user, only: [:toggle_job, :job_collabs_list, :remove_collab, :edit, :update, :destroy, :new, :create, :add_collaborator, :user_applied_jobs, :user_jobs, :add_collaborator, :add_collaborator_to_rel]
+  before_action :set_job, only: [:toggle_job, :edit, :update, :show, :destroy, :add_collaborator, :add_collaborator_to_rel, :job_collabs_list, :remove_collab]
+  before_action :require_same_or_collab_user, only: [:edit, :update, :destroy, :add_collaborator, :add_collaborator_to_rel, :toggle_job]
   before_action :require_same_user, only: [:job_collabs_list, :remove_collab]
   before_action :set_user_from_name, only: [:user_applied_jobs, :user_jobs]
   before_action :require_same_user_from_name, only: [:user_applied_jobs, :user_jobs]
+
+  before_action :not_read_only, only:[:edit, :update, :add_collaborator, :add_collaborator_to_rel, :remove_collab]
 
   ITEMS_PER_PAGE = 20
 
@@ -23,9 +25,9 @@ class JobsController < ApplicationController
     end
 
     if params[:query].present?
-      @jobs = Job.where(is_deleted: false).search(params[:query]).records.last((@jobs = Job.all.search(params[:query]).count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
+      @jobs = Job.where(is_deleted: false).where(is_closed: false).search(params[:query]).records.last((@jobs = Job.all.search(params[:query]).count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
     else
-      @jobs = Job.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+      @jobs = Job.where(is_deleted: false).where(is_closed: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     end
 
   end
@@ -39,6 +41,7 @@ class JobsController < ApplicationController
     @job = Job.new(job_params)
     @job.poster = current_user
     @job.is_deleted = false
+    @job.is_closed = false
 
     if @job.save
       flash[:success] = "Job Created!"
@@ -76,7 +79,7 @@ class JobsController < ApplicationController
       @page = params[:page].to_i
     end
 
-    @user_jobs = current_user.jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    @user_jobs = current_user.jobs.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     @title = "Jobs"
   end
 
@@ -168,10 +171,37 @@ class JobsController < ApplicationController
     end
   end
 
+  def toggle_job
+    if(@job.is_closed == false)
+      @job.is_closed = true
+      if @job.save
+        flash[:success] = "Job posting has now been closed.It's now not visible to public and has been archived (read-only)"
+        redirect_to job_path(@job)
+      else
+        flash[:error] = "Job status can't be changed."
+        redirect_to job_path(@job)
+      end
+    else
+      @job.is_closed = false
+      if @job.save
+        flash[:success] = "Job posting has now been re-opened.It's now visible to public and actionable"
+        redirect_to job_path(@job)
+      else
+        flash[:error] = "Job status can't be changed."
+        redirect_to job_path(@job)
+      end
+    end
+  end
+
   private
 
     def set_job
-      @job = Job.where(:is_deleted => false).find(params[:id])
+      @jobx =  Job.where(:is_deleted => false).find(params[:id])
+      if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)
+        @job = @jobx
+      else
+        @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:id])
+      end
     end
 
     def require_same_or_collab_user
@@ -203,4 +233,11 @@ class JobsController < ApplicationController
       params.require(:job).permit(:title, :company_name, :intro, :desc_nomark, :pay, :location, :req_subs)
     end
     
+    def not_read_only
+      if @job.is_closed == true
+        flash[:error] = 'This job is archived hence can\'t be modified'
+        redirect_to job_path(@job)
+      end
+    end
+
 end

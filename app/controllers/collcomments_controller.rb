@@ -3,6 +3,7 @@ class CollcommentsController < ApplicationController
   before_action :set_job
   before_action :set_application
   before_action :collab_ornah, only: [:create]
+  before_action :not_read_only, only: [:create]
 
   def create
     @collcomment = Collcomment.new(collcomment_params)
@@ -25,11 +26,16 @@ class CollcommentsController < ApplicationController
   private
 
     def set_job
-      @job = Job.where(is_deleted: false).find(params[:job_id])
+      @jobx =  Job.where(:is_deleted => false).find(params[:job_id])
+      if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)
+        @job = @jobx
+      else
+        @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:job_id])
+      end
     end
 
     def set_application
-      @application = Application.find(params[:application_id])
+      @application = @job.applications.find(params[:application_id])
     end
 
     def collab_ornah
@@ -41,6 +47,13 @@ class CollcommentsController < ApplicationController
 
     def collcomment_params
       params.require(:collcomment).permit(:body_nomark)
+    end
+
+    def not_read_only
+      if @job.is_closed == true
+        flash[:error] = 'This job is archived hence can\'t be modified'
+        redirect_to job_path(@job)
+      end
     end
 
 end
