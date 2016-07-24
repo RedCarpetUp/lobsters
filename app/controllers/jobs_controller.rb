@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :require_user, only: [:toggle_job, :job_collabs_list, :remove_collab, :edit, :update, :destroy, :new, :create, :add_collaborator, :user_applied_jobs, :user_jobs, :add_collaborator, :add_collaborator_to_rel]
+  before_action :require_user, only: [:toggle_job, :job_collabs_list, :remove_collab, :edit, :update, :destroy, :new, :create, :add_collaborator, :user_collab_jobs, :user_applied_jobs, :user_jobs, :add_collaborator_to_rel]
   before_action :set_job, only: [:toggle_job, :edit, :update, :show, :destroy, :add_collaborator, :add_collaborator_to_rel, :job_collabs_list, :remove_collab]
   before_action :require_same_or_collab_user, only: [:edit, :update, :destroy, :add_collaborator, :add_collaborator_to_rel, :toggle_job]
   before_action :require_same_user, only: [:job_collabs_list, :remove_collab]
@@ -83,6 +83,17 @@ class JobsController < ApplicationController
     @title = "Jobs"
   end
 
+    def user_collab_jobs
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
+    @user_collaborations = current_user.collabjobs.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    @title = "Jobs"
+  end
+
   def user_applied_jobs
 
     @page = 1
@@ -90,7 +101,7 @@ class JobsController < ApplicationController
       @page = params[:page].to_i
     end
 
-    @user_applications = Job.all.where(is_deleted: false).where(id: current_user.applications.pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    @user_applications = Job.where(is_deleted: false).where(id: current_user.applications.where(is_deleted: false).pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     @title = "Jobs"
   end
 
@@ -104,18 +115,18 @@ class JobsController < ApplicationController
       flash[:error] = 'No user by this username found'
       redirect_to job_path(@job)
     else
-      if (@job.poster == @new_collab_user)||(@job.applications.include?(@new_collab_user))
+      if (@job.poster == @new_collab_user)||(@job.applications.where(is_deleted: false).include?(@new_collab_user))
         flash[:error] = 'This user is an already a collaborator'
         redirect_to job_path(@job) and return
       end
-      if @job.applications.pluck(:applicant_id).include?(@new_collab_user.id)
+      if @job.applications.where(is_deleted: false).pluck(:applicant_id).include?(@new_collab_user.id)
         flash[:error] = 'This user is an applicant for this job, hence can\'t collaborate in selection process'
         redirect_to job_path(@job) and return
       end
       @job.collaborators << @new_collab_user
       if @job.collaborators.include?(@new_collab_user)
         flash[:success] = 'User added as collaborator successfully!'
-        @job.applications.each do |app|
+        @job.applications.where(is_deleted: false).each do |app|
           @new_collcomm = Collcomment.new
           @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{@new_collab_user.username} added as collaborator"
           @new_collcomm.application = app
@@ -151,7 +162,7 @@ class JobsController < ApplicationController
       @job.collaborators.delete(@rem_collab_user)
       if !@job.collaborators.include?(@rem_collab_user)
         flash[:success] = 'User removed from collaborators successfully!'
-        @job.applications.each do |app|
+        @job.applications.where(is_deleted: false).each do |app|
           @new_collcomm = Collcomment.new
           @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{@rem_collab_user.username} removed from collaborators"
           @new_collcomm.application = app
@@ -197,29 +208,48 @@ class JobsController < ApplicationController
 
     def set_job
       @jobx =  Job.where(:is_deleted => false).find(params[:id])
-      if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)
-        @job = @jobx
+      if user_signed_in?
+        if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)||@jobx.applications.pluck(:applicant_id).include?(current_user.id)
+          @job = @jobx
+        else
+          @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:id])
+        end
       else
         @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:id])
       end
     end
 
     def require_same_or_collab_user
-      if (!@job.collaborators.include?(current_user))&&(current_user != @job.poster)
+      if user_signed_in?
+        if (!@job.collaborators.include?(current_user))&&(current_user != @job.poster)
+          flash[:error] = 'You can only edit jobs you have posted'
+          redirect_to jobs_path
+        end
+      else
         flash[:error] = 'You can only edit jobs you have posted'
         redirect_to jobs_path
       end
     end
 
     def require_same_user
-      if (current_user != @job.poster)
+      if user_signed_in?
+        if (current_user != @job.poster)
+          flash[:error] = 'You can only edit jobs you have posted'
+          redirect_to jobs_path
+        end
+      else
         flash[:error] = 'You can only edit jobs you have posted'
         redirect_to jobs_path
       end
     end
 
     def require_same_user_from_name
-      if (@name_user.nil?)||(current_user != @name_user)
+      if user_signed_in?
+        if (@name_user.nil?)||(current_user != @name_user)
+          flash[:error] = 'You don\'t have permission for this action '
+          redirect_to jobs_path
+        end
+      else
         flash[:error] = 'You don\'t have permission for this action '
         redirect_to jobs_path
       end

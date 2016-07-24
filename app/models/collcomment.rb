@@ -2,9 +2,9 @@ class Collcomment < ActiveRecord::Base
   belongs_to :user
   belongs_to :application
   validates :application_id, presence: true
-  validates :is_auto, presence: true
+  #validates :is_auto, presence: true
   validates :user_id, presence: true, if: :notauto?
-  validates :body_nomark, presence: true, length: {minimum:5, maximum: 140 }
+  validates :body_nomark, presence: true, length: {minimum:5, maximum: 140}
 
   def body_nomark=(des)
     self[:raw_body] = des.to_s.rstrip

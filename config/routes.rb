@@ -159,6 +159,7 @@ Lobsters::Application.routes.draw do
 
     get "/u/jobs/:username" => "jobs#user_jobs", :as => "user_jobs"
     get "/u/applications/:username" => "jobs#user_applied_jobs", :as => "user_applications"
+    get "/u/collaborations/:username" => "jobs#user_collab_jobs", :as => "user_collaborations"
 
     get "/u/jobs/:username/page/:page" => "jobs#user_jobs"
     get "/u/applications/:username/page/:page" => "jobs#user_applied_jobs"

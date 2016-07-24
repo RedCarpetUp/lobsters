@@ -125,46 +125,68 @@ class ApplicationsController < ApplicationController
 
     def set_job
       @jobx =  Job.where(:is_deleted => false).find(params[:job_id])
-      if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)
-        @job = @jobx
+      if user_signed_in?
+        if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)||@jobx.applications.pluck(:applicant_id).include?(current_user.id)
+          @job = @jobx
+        else
+          @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:job_id])
+        end
       else
         @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:job_id])
       end
     end
 
     def require_same_user
-      if current_user.id != @application.applicant_id
+      if user_signed_in?
+        if current_user.id != @application.applicant_id
+          flash[:error] = 'You can only edit applications you have posted'
+          redirect_to job_application_path
+        end
+      else
         flash[:error] = 'You can only edit applications you have posted'
         redirect_to job_application_path
       end
     end
 
     def require_poster_or_collab
-    	if (!@job.collaborators.include?(current_user))&&(current_user != @job.poster)
-        	flash[:error] = 'You are not allowed to do this action'
-        	redirect_to job_path(@job)
-    	end
+      if user_signed_in?
+        if (!@job.collaborators.include?(current_user))&&(current_user != @job.poster)
+            flash[:error] = 'You are not allowed to do this action'
+            redirect_to job_path(@job)
+        end
+      else
+        flash[:error] = 'You are not allowed to do this action'
+        redirect_to job_path(@job)
+      end
     end
 
     def require_poster_or_collab_or_applicant
       if Rails.application.config.anon_apply == true
-        if (current_user != @job.poster) and (!@job.collaborators.include?(current_user))
-          if @application.applicant_id.nil?
-            flash[:error] = 'You are not allowed to see applications'
-            redirect_to job_path(@job)      
-          else
-            if @application.applicant != current_user
+        if user_signed_in?
+          if (current_user != @job.poster) and (!@job.collaborators.include?(current_user))
+            if @application.applicant_id.nil?
               flash[:error] = 'You are not allowed to see applications'
-              redirect_to job_path(@job)
+              redirect_to job_path(@job)      
+            else
+              if @application.applicant != current_user
+                flash[:error] = 'You are not allowed to see applications'
+                redirect_to job_path(@job)
+              end
             end
           end
-            flash[:error] = 'You are not allowed to see applications'
-            redirect_to job_path(@job)
+        else
+          flash[:error] = 'You are not allowed to see applications'
+          redirect_to job_path(@job)
         end
       else
-        if (current_user != @job.poster) and (current_user != @application.applicant) and (!@job.collaborators.include?(current_user))
-            flash[:error] = 'You are not allowed to see applications'
-            redirect_to job_path(@job)
+        if user_signed_in?
+          if (current_user != @job.poster) and (current_user != @application.applicant) and (!@job.collaborators.include?(current_user))
+              flash[:error] = 'You are not allowed to see applications'
+              redirect_to job_path(@job)
+          end
+        else
+          flash[:error] = 'You are not allowed to see applications'
+          redirect_to job_path(@job)
         end
       end
     end
@@ -178,12 +200,16 @@ class ApplicationsController < ApplicationController
           end 
         end
       else
-        if (@job.collaborators.include?(current_user))||(current_user == @job.poster)
-            flash[:error] = 'You are not allowed to apply to your own job'
-            redirect_to job_path(@job)
-        end 
+        if user_signed_in?
+          if (@job.collaborators.include?(current_user))||(current_user == @job.poster)
+              flash[:error] = 'You are not allowed to apply to your own job'
+              redirect_to job_path(@job)
+          end
+        else
+          flash[:error] = 'You are not allowed to apply to your own job'
+          redirect_to job_path(@job)
+        end
       end
-
     end
 
     def application_params

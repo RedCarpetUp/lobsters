@@ -18,7 +18,7 @@ class CollcommentsController < ApplicationController
       end
       redirect_to job_application_path(@job, @application)
     else
-      flash[:error] = @collcomment.errors.full_messages.to_sentence.gsub('BodyNomark','Comment').gsub('Body','Comment')
+      flash[:error] = @collcomment.errors.full_messages.to_sentence
       redirect_to job_application_path(@job, @application)
     end
   end
@@ -27,19 +27,28 @@ class CollcommentsController < ApplicationController
 
     def set_job
       @jobx =  Job.where(:is_deleted => false).find(params[:job_id])
-      if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)
-        @job = @jobx
+      if user_signed_in?
+        if @jobx.collaborators.include?(current_user)||(current_user == @jobx.poster)
+          @job = @jobx
+        else
+          @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:job_id])
+        end
       else
         @job = Job.where(:is_deleted => false).where(is_closed: false).find(params[:job_id])
       end
     end
 
     def set_application
-      @application = @job.applications.find(params[:application_id])
+      @application = @job.applications.where(is_deleted: false).find(params[:application_id])
     end
 
     def collab_ornah
-      if !(@job.collaborators.include?(current_user) || (@job.poster == current_user))
+      if user_signed_in?
+        if !(@job.collaborators.include?(current_user) || (@job.poster == current_user))
+          flash[:danger] = 'You can only comment if you are a collaborator'
+          redirect_to job_path(@job)
+        end
+      else
         flash[:danger] = 'You can only comment if you are a collaborator'
         redirect_to job_path(@job)
       end

@@ -12,7 +12,7 @@
 
 <div class="morelink">
   <% if @page && @page > 1 %>
-    <a href="/jobs<%= @page == 2 ? "" : "/page/#{@page - 1}" %>">&lt;&lt; 
+    <a href="/u/applications/<%= @name_user.username %><%= @page == 2 ? "" : "/page/#{@page - 1}" %>">&lt;&lt; 
       Page <%= @page - 1 %></a>
   <% end %>
 
@@ -21,7 +21,7 @@
       |
     <% end %>
 
-    <a href="/jobs/page/<%= @page + 1 %>">Page
+    <a href="/u/applications/<%= @name_user.username %>/page/<%= @page + 1 %>">Page
       <%= @page + 1 %> &gt;&gt;</a>
   <% end %>
 </div>

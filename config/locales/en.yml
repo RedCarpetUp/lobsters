@@ -53,4 +53,9 @@ en:
       actionline: "Action"
       reasonline: "Reason"
       page: "Page"
-
+  activerecord:
+    attributes:
+      job:
+        desc_nomark: "Description"
+      collcomment:
+        body_nomark: "Comment"

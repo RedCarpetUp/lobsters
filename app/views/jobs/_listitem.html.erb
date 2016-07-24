@@ -4,7 +4,7 @@
 
     <span class="link">
         <%= link_to job_path(job) do %>
-          <%= job.title %>
+          <%= job.is_closed ? '[CLOSED]'+job.title : job.title %>
         <% end %>
     </span>
 

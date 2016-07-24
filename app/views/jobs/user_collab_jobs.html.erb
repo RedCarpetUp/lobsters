@@ -1,0 +1,27 @@
+<div class="box">
+
+<div class="legend">
+  Jobs you collaborate for
+</div>
+</div>
+
+<ol class="stories list">
+  <%= render :partial => "jobs/listitem", :collection => @user_collaborations,
+    :as => :job %>
+</ol>
+
+<div class="morelink">
+  <% if @page && @page > 1 %>
+    <a href="/u/collaborations/<%= @name_user.username %><%= @page == 2 ? "" : "/page/#{@page - 1}" %>">&lt;&lt; 
+      Page <%= @page - 1 %></a>
+  <% end %>
+
+  <% if @user_collaborations.count == 20 %>
+    <% if @page && @page > 1 %>
+      |
+    <% end %>
+
+    <a href="/u/collaborations/<%= @name_user.username %>/page/<%= @page + 1 %>">Page
+      <%= @page + 1 %> &gt;&gt;</a>
+  <% end %>
+</div>

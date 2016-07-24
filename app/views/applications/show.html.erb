@@ -1,7 +1,7 @@
 <div class="box">
 <h2 style="margin-bottom:5px;"><%= @job.is_closed ? "[ARCHIVED]" : "" %> Applicant details</h2>
 
-<% if @application.applicant == current_user %>
+<% if @application.applicant == current_user && !@job.is_closed %>
     <%= link_to "Edit", edit_job_application_path(@job, @application), :style => "color:#888;text-decoration:none;" %>
   <span style="color: #888;">|</span>
     <%= link_to "Delete", job_application_path(@job, @application), method: :delete, data: { confirm: 'Are You Sure?' }, :style => "color:#888;text-decoration:none;" %>
