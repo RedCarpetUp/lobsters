@@ -7,7 +7,7 @@
     <%= link_to "Delete", job_application_path(@job, @application), method: :delete, data: { confirm: 'Are You Sure?' }, :style => "color:#888;text-decoration:none;" %>
 <% end %>
 
-<% if user_signed_in? && current_user == @job.poster %>
+<% if user_signed_in? && ((current_user == @job.poster)||(@job.collaborators.include?(current_user))) %>
   <div class="box" style="float:right;">
     <h3>Current Status: <%= @application.status %></h3>
     <% if !@job.is_closed %>
@@ -16,6 +16,14 @@
     <% end %>
     <% end %>
   </div>
+<% end %>
+
+<% if @application.applicant == current_user && !@job.is_closed %>
+  <% if @application.status == "Hired" %>
+  <div class="box" style="float:right;">
+    <h3>Status: <%= @application.status %></h3>
+  </div>
+  <% end %>
 <% end %>
 
 <h3>Name</h3>
