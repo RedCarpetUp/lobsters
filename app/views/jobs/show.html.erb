@@ -57,3 +57,9 @@
 <p><%= @job.location %></p>
 
 </div>
+
+<% if user_signed_in? && ((current_user == @job.poster)||(@job.collaborators.include?(current_user))) %>
+<div class="box">
+<!--<h3>Recent Activities</h3>-->
+</div>
+<% end %>
