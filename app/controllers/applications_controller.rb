@@ -84,7 +84,7 @@ class ApplicationsController < ApplicationController
     @application.status = "Applied"
     @application.is_deleted = false
 
-    if @application.save
+    if verify_recaptcha(model: @application) && @application.save 
       flash[:success] = "Application Created!"
       if Rails.application.config.anon_apply == true
         redirect_to job_path(@job)
@@ -101,7 +101,7 @@ class ApplicationsController < ApplicationController
   end
 
   def update
-    if @application.update(application_params)
+    if verify_recaptcha(model: @application) && @application.update(application_params)
       flash[:success] = 'Updated Successfully!'
       redirect_to job_application_path(@job, @application)
     else
