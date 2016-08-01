@@ -7,7 +7,7 @@
 <%= form_tag organisation_snippets_path, method: :get do %>
 <h5 style="display:inline;">Person:</h5>
 <%= select_tag "person", options_for_select(@av_members, params[:person].present? ? params[:person] : "all") %>
-&nbsp&nbsp
+<br>
 <h5 style="display:inline;">Week:</h5>
 <%= week_field :sni, :week_no, :value => params[:sni].present? ? params[:sni]["week_no"] : "" %>
 <%= submit_tag "Go" %>
