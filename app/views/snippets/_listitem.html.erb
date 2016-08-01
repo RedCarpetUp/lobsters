@@ -1,6 +1,6 @@
 <hr>
 <h4>BY: <%= snippet.user.username %></h4>
-<p>At: <%= snippet.created_at %></p>
+<p>At: <%= time_ago_in_words_label snippet.created_at %></p>
 <h4 style="color:grey;margin:0px;">Snippet</h4>
 <p><%= raw snippet.body %></p>
 <hr>

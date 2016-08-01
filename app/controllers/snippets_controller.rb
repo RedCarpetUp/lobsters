@@ -1,7 +1,7 @@
 class SnippetsController < ApplicationController
   before_action :require_user
 
-  ITEMS_PER_PAGE = 20
+  ITEMS_PER_PAGE = 3
 
   before_action :set_organisation
   #before_action :set_snippet, only: [:edit, :update, :destroy]
@@ -9,6 +9,12 @@ class SnippetsController < ApplicationController
   before_action :require_owner_or_member, only: [:index, :new, :create]
 
   def index
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
     @title = "Snippets"
     @av_members = [["All", "all"]]
     @av_members = @av_members + @organisation.users.collect { |c| [c.username, c.id] }
@@ -34,6 +40,10 @@ class SnippetsController < ApplicationController
     end
 
     @snippets = @snippets.order('created_at desc')
+
+    @snippets = @snippets.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+
+    #@snippets = @snippets.records.last((@jobs = Job.all.search(params[:query]).count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
 
   end
 

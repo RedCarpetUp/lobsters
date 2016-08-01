@@ -184,5 +184,7 @@ Lobsters::Application.routes.draw do
     get '/organisations/:id/members' => "organisations#org_members_list", :as => "org_members"
     post '/organisations/:id/members/:rem_id' => "organisations#remove_member", :as => "rem_member"
 
+    get "/organisations/:organisation_id/snippets/page/:page" => "snippets#index"
+
   end
 end

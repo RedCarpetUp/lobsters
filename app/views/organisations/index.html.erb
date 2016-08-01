@@ -10,6 +10,8 @@
 <% if @organisations.empty? %>
 <p style="color:grey;"><em>Empty</em></p>
 <% else %>
+<%= render :partial => "organisations/listorg", :collection => @organisations, :as => :org %>
 <% end %>
 
-<%= render :partial => "organisations/listorg", :collection => @organisations, :as => :org %>
+<br>
+<%=  link_to "New Organisation", new_organisation_path %>
