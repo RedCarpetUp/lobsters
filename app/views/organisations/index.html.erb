@@ -1,0 +1,15 @@
+<h2>Your Organisations</h2>
+<h3>Organisations you created</h3>
+<% if @ownorganisations.empty? %>
+<p style="color:grey;"><em>Empty</em></p>
+<% else %>
+<%= render :partial => "organisations/listorg", :collection => @ownorganisations, :as => :org %>
+<% end %>
+
+<h3>Organisations you are part of</h3>
+<% if @organisations.empty? %>
+<p style="color:grey;"><em>Empty</em></p>
+<% else %>
+<% end %>
+
+<%= render :partial => "organisations/listorg", :collection => @organisations, :as => :org %>

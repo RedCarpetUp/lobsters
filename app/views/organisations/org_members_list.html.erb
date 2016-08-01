@@ -1,0 +1,20 @@
+<div class="box">
+
+<div class="legend">
+  Members
+</div>
+
+<ol class="stories list">
+<table class="appl_table">
+	<tr>
+		<th>Name</th>
+		<th>Action</th>
+	</tr>
+  <%= render :partial => "organisations/listitem_member", :object => @organisation.owner,
+    :as => :member %>
+  <%= render :partial => "organisations/listitem_member", :collection => @members_list,
+    :as => :member %>
+</table>
+</ol>
+
+</div>

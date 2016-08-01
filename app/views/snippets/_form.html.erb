@@ -1,0 +1,36 @@
+<%= form_for [@organisation, @snippet], :url => @snippet.new_record? ? organisation_snippets_path(@organisation, @snippet) : organisation_snippet_path(@organisation, @snippet) do |f| %>
+
+<% if f.object.errors.any? %>
+  <%= error_messages_for f.object %>
+<% end %>
+
+<div class="box">
+
+<div class="legend">
+  Submit Snippet
+</div>
+
+<div class="boxline">
+<%= f.label :body_nomark, "Text", :class => "required" %>
+<%= f.text_area :body_nomark, :style => "width: 709px !important;", :rows => 5 %>
+<div class="hintblock">Give a brief list of tasks</div>
+</div>
+<br>
+
+</div>
+
+<div class="box">
+  <div class="boxline actions">
+    <div class="boxline actions markdown_help_toggler">
+      <div class="markdown_help_label">
+        Markdown formatting available
+      </div>
+      <%= f.submit(@snippet.new_record? ? 'Apply' : 'Edit') %>
+      <div style="clear: both;"></div>
+      <%= render :partial => "global/markdownhelp"%>
+    </div>
+  </div>
+</div>
+
+
+<% end %>

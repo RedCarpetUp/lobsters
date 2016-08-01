@@ -1,0 +1,16 @@
+<tr>
+<td>
+<span class="link">
+    <%= link_to user_path(member.username) do %>
+      <%= member.username %>
+    <% end %>
+</span>
+</td>
+<td>
+<% if member != @organisation.owner %>
+<%= link_to "REMOVE", rem_member_path(@organisation, member.id), method: :post, data: { confirm: 'Are You Sure?' } %>
+<% else %>
+<em style="color:grey;">Owner</em>
+<% end %>
+</td>
+</tr>

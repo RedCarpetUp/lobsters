@@ -1,0 +1,36 @@
+<%= form_for @organisation do |f| %>
+
+<% if f.object.errors.any? %>
+  <%= error_messages_for f.object %>
+<% end %>
+
+<div class="box">
+
+<div class="legend">
+  Submit an organisation
+</div>
+
+<div class="boxline">
+<%= f.label :name, :class => "required" %>
+<%= f.text_field :name, :maxlength => 100 %>
+<div class="hintblock">Clearly mention the name of the organisation</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :intro, :class => "required" %>
+<%= f.text_field :intro, :maxlength => 100 %>
+<div class="hintblock">Give a one line intro of your organisation</div>
+</div>
+<br>
+
+</div>
+
+<div class="box">
+<div class="boxline actions">
+<%= f.submit(@organisation.new_record? ? 'Create' : 'Edit') %>
+</div>
+</div>
+
+
+<% end %>

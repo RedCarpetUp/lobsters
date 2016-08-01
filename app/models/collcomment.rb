@@ -16,7 +16,7 @@ class Collcomment < ActiveRecord::Base
   end
 
   def generated_markeddown_body
-    Markdowner.to_html(self.body_nomark, { :allow_images => true })
+    Markdowner.to_html(self.body_nomark)
   end
 
   private

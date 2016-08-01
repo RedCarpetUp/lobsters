@@ -65,7 +65,6 @@ class JobsController < ApplicationController
   end
 
   def destroy
-    tempuser = @job.user
     @job.is_deleted = true
     @job.save
     flash[:success] = 'Job Deleted'
@@ -115,7 +114,7 @@ class JobsController < ApplicationController
       flash[:error] = 'No user by this username found'
       redirect_to job_path(@job)
     else
-      if (@job.poster == @new_collab_user)||(@job.applications.where(is_deleted: false).include?(@new_collab_user))
+      if (@job.poster == @new_collab_user)||(@job.collaborators.include?(@new_collab_user))
         flash[:error] = 'This user is an already a collaborator'
         redirect_to job_path(@job) and return
       end

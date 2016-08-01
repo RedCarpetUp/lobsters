@@ -64,6 +64,8 @@
 
         <% links.merge!({ "/jobs" => t('.joblink') }) %>
 
+        <% links.merge!({ "/organisations" => t('.org_snip') }) %>
+
         <% if @cur_url.present? && !links.keys.include?(@cur_url) &&
         @heading.present? %>
           <span id="headertitle">

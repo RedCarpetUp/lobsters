@@ -7,10 +7,16 @@ class User < ActiveRecord::Base
     -> { includes :user }
   has_many :comments
   has_many :collcomments
+
+  has_many :snippets
+  has_many :ownorganisations, foreign_key: "owner_id", class_name: "Organisation"
+
   has_many :jobs, foreign_key: "poster_id"
   has_many :applications, foreign_key: "applicant_id"
 
   has_and_belongs_to_many :collabjobs, :join_table => :collabjobs_collaborators, foreign_key: "collabjob_id", class_name: "Job", association_foreign_key: "collaborator_id"
+
+  has_and_belongs_to_many :organisations, :join_table => :organisations_users, foreign_key: "organisation_id", class_name: "Organisation", association_foreign_key: "user_id"
 
   has_many :sent_messages,
     :class_name => "Message",

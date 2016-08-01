@@ -1,0 +1,16 @@
+<h2 style="margin-bottom:0px;"><%= @organisation.name %></h2>
+<% if (@organisation.owner == current_user) %>
+    <%= link_to "Edit", edit_organisation_path(@organisation), :style => "color:#888;text-decoration:none;" %>
+  <span style="color: #888;">|</span>
+    <%= link_to "Delete", @organisation, method: :delete, data: { confirm: 'Are You Sure?' }, :style => "color:#888;text-decoration:none;" %>
+<% end %>
+<br><br>
+
+<%= @organisation.intro %>
+<br>
+<br>
+<%= link_to "See Snippets", organisation_snippets_path(@organisation) %>
+<br><br>
+<%= link_to "Members List", org_members_path(@organisation) %>
+&nbsp
+<%= link_to "Add Member", add_member_path(@organisation) %>

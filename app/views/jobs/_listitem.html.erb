@@ -10,7 +10,7 @@
 
     <div class="byline">
 
-        <a href="/u/test" class="new_user"><%= job.company_name %></a>
+        <a href="/u/<%= job.poster.username %>" class="new_user"><%= job.company_name %></a>
 
         <%= time_ago_in_words_label(job.created_at, :strip_about => true) %>
 

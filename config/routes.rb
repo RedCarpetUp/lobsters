@@ -174,6 +174,15 @@ Lobsters::Application.routes.draw do
 
     get "/jobs/:job_id/applications/:id/page/:page" => "applications#show"
 
+    resources :organisations do
+      resources :snippets, :except => [:show]
+    end
+
+    get '/organisations/:id/add_member' => "organisations#add_member", :as => "add_member"
+    post '/organisations/:id/add_member' => "organisations#add_member_to_rel", :as => "add_member_to_rel"
+
+    get '/organisations/:id/members' => "organisations#org_members_list", :as => "org_members"
+    post '/organisations/:id/members/:rem_id' => "organisations#remove_member", :as => "rem_member"
 
   end
 end
