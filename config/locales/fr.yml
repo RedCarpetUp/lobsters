@@ -53,3 +53,12 @@ fr:
       actionline: "Action"
       reasonline: "Raison"
       page: "Page"
+
+  activerecord:
+    attributes:
+      job:
+        desc_nomark: "Description"
+      collcomment:
+        body_nomark: "Comment"
+      snippet:
+        body_nomark: "Snippet"

@@ -203,6 +203,21 @@ class User < ActiveRecord::Base
 
   def can_invite?
     !banned_from_inviting? && self.can_submit_stories?
+
+  end
+
+  def can_offer_suggestions?
+    !self.is_new? && (self.karma >= MIN_KARMA_TO_SUGGEST)
+  end
+
+  def can_submit_stories?
+    self.karma >= MIN_KARMA_TO_SUBMIT_STORIES
+  end
+
+  def check_session_token
+    if self.session_token.blank?
+      self.session_token = Utils.random_str(60)
+    end
   end
 
   def can_offer_suggestions?
@@ -409,6 +424,13 @@ class User < ActiveRecord::Base
   def update_unread_message_count!
     Keystore.put("user:#{self.id}:unread_messages",
       self.received_messages.unread.count)
+  end
+
+  def votes_for_others
+    self.votes.joins(:story, :comment).
+      where("comments.user_id <> votes.user_id AND " <<
+        "stories.user_id <> votes.user_id").
+      order("id DESC")
   end
 
   def votes_for_others

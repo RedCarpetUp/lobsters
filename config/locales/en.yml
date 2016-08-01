@@ -54,6 +54,7 @@ en:
       actionline: "Action"
       reasonline: "Reason"
       page: "Page"
+
   activerecord:
     attributes:
       job:

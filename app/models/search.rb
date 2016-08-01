@@ -85,6 +85,30 @@ class Search
       end
     end
 
+    # extract domain query since it must be done separately
+    domain = nil
+    words = self.q.to_s.split(" ").reject{|w|
+      if m = w.match(/^domain:(.+)$/)
+        domain = m[1]
+      end
+    }.join(" ")
+
+    if domain.present?
+      self.what = "stories"
+      story_ids = Story.select(:id).where("`url` REGEXP '//([^/]*\.)?" +
+        ActiveRecord::Base.connection.quote_string(domain) + "/'").
+        collect(&:id)
+
+      if story_ids.any?
+        opts[:with] = { :story_id => story_ids }
+      else
+        self.results = []
+        self.total_results = 0
+        self.page = 0
+        return false
+      end
+    end
+
     opts[:classes] = case what
       when "all"
         [ Story, Comment ]
@@ -98,7 +122,6 @@ class Search
 
     #query = Riddle.escape(words)
     query = words.gsub(/(['\/~"@])/, '\\\\\1')
-
 
     # go go gadget search
     self.results = []
