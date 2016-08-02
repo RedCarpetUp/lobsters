@@ -116,3 +116,11 @@ This should not be altered once app is setup.
 
           */20 * * * * cd /path/to/lobsters && env RAILS_ENV=production bundle exec rake searchkick:reindex:all > /dev/null
           */5 * * * *  cd /path/to/lobsters && env RAILS_ENV=production sh -c 'bundle exec ruby script/mail_new_activity; bundle exec ruby script/post_to_twitter'
+
+* To enable SSL on heroku:
+
+          $ heroku labs:enable http-sni --app <your app>
+          $ heroku plugins:install heroku-certs
+
+          Go to heroku dashboard, settings and in SSL certificates, add your certificate and key file.
+          The address mentioned at end, point your DNS to it.
