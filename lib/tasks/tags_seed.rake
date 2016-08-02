@@ -27,7 +27,7 @@ namespace :tags_seed do
 		end
 	end
 
-	task remove: :environment do
+	task inactive: :environment do
 		rem_tags_list = ["Tag1", "Tag2", "Tag3", "Tag4", "Tag6", "Tag7"]
 		rem_tags_list.each do |thetag|
 			if !Tag.where(:tag => thetag ).blank?
