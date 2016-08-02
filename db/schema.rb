@@ -156,9 +156,9 @@ ActiveRecord::Schema.define(version: 20160731134025) do
     t.integer  "story_id"
     t.integer  "comment_id"
     t.integer  "user_id"
-    t.text     "action",              limit: 16777215
-    t.text     "reason",              limit: 16777215
-    t.boolean  "is_from_suggestions",                  default: false
+    t.text     "action"
+    t.text     "reason"
+    t.boolean  "is_from_suggestions", default: false
   end
 
   create_table "organisations", force: true do |t|
@@ -188,22 +188,22 @@ ActiveRecord::Schema.define(version: 20160731134025) do
   create_table "stories", force: true do |t|
     t.datetime "created_at"
     t.integer  "user_id"
-    t.string   "url",                    limit: 250,                                default: ""
-    t.string   "title",                  limit: 150,                                default: "",    null: false
-    t.text     "description",            limit: 16777215
-    t.string   "short_id",               limit: 6,                                  default: "",    null: false
-    t.boolean  "is_expired",                                                        default: false, null: false
-    t.integer  "upvotes",                                                           default: 0,     null: false
-    t.integer  "downvotes",                                                         default: 0,     null: false
-    t.boolean  "is_moderated",                                                      default: false, null: false
-    t.decimal  "hotness",                                 precision: 20, scale: 10, default: 0.0,   null: false
-    t.text     "markeddown_description", limit: 16777215
-    t.text     "story_cache",            limit: 16777215
-    t.integer  "comments_count",                                                    default: 0,     null: false
+    t.string   "url",                    limit: 250,                           default: ""
+    t.string   "title",                  limit: 150,                           default: "",    null: false
+    t.text     "description"
+    t.string   "short_id",               limit: 6,                             default: "",    null: false
+    t.boolean  "is_expired",                                                   default: false, null: false
+    t.integer  "upvotes",                                                      default: 0,     null: false
+    t.integer  "downvotes",                                                    default: 0,     null: false
+    t.boolean  "is_moderated",                                                 default: false, null: false
+    t.decimal  "hotness",                            precision: 20, scale: 10, default: 0.0,   null: false
+    t.text     "markeddown_description"
+    t.text     "story_cache"
+    t.integer  "comments_count",                                               default: 0,     null: false
     t.integer  "merged_story_id"
     t.datetime "unavailable_at"
     t.string   "twitter_id",             limit: 20
-    t.boolean  "user_is_author",                                                    default: false
+    t.boolean  "user_is_author",                                               default: false
   end
 
   add_index "stories", ["hotness"], name: "hotness_idx", using: :btree
@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(version: 20160731134025) do
   add_index "stories", ["merged_story_id"], name: "index_stories_on_merged_story_id", using: :btree
   add_index "stories", ["short_id"], name: "unique_short_id", unique: true, using: :btree
   add_index "stories", ["twitter_id"], name: "index_stories_on_twitter_id", using: :btree
-  add_index "stories", ["url"], name: "url", length: {"url"=>191}, using: :btree
+  add_index "stories", ["url"], name: "url", using: :btree
 
   create_table "suggested_taggings", force: true do |t|
     t.integer "story_id"
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(version: 20160731134025) do
     t.boolean "privileged",              default: false
     t.boolean "is_media",                default: false
     t.boolean "inactive",                default: false
-    t.float   "hotness_mod", limit: 24,  default: 0.0
+    t.float   "hotness_mod",             default: 0.0
   end
 
   add_index "tags", ["tag"], name: "tag", unique: true, using: :btree
@@ -274,7 +274,6 @@ ActiveRecord::Schema.define(version: 20160731134025) do
     t.string   "mailing_list_token",           limit: 75
     t.integer  "mailing_list_mode",                        default: 0
     t.integer  "karma",                                    default: 0,     null: false
-
     t.datetime "banned_at"
     t.integer  "banned_by_user_id"
     t.string   "banned_reason",                limit: 200
