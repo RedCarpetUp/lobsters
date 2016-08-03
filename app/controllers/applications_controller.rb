@@ -68,6 +68,11 @@ class ApplicationsController < ApplicationController
     if Rails.application.config.anon_apply != true
       @application.name = current_user.username
       @application.email = current_user.email
+    else
+      if user_signed_in?
+        @application.name = current_user.username
+        @application.email = current_user.email
+      end
     end
   end
 

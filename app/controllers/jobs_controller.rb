@@ -1,8 +1,8 @@
 class JobsController < ApplicationController
   before_action :require_user, only: [:toggle_job, :job_collabs_list, :remove_collab, :edit, :update, :destroy, :new, :create, :add_collaborator, :user_collab_jobs, :user_applied_jobs, :user_jobs, :add_collaborator_to_rel]
   before_action :set_job, only: [:toggle_job, :edit, :update, :show, :destroy, :add_collaborator, :add_collaborator_to_rel, :job_collabs_list, :remove_collab]
-  before_action :require_same_or_collab_user, only: [:edit, :update, :destroy, :add_collaborator, :add_collaborator_to_rel, :toggle_job]
-  before_action :require_same_user, only: [:job_collabs_list, :remove_collab]
+  before_action :require_same_or_collab_user, only: [:edit, :update, :add_collaborator, :add_collaborator_to_rel, :toggle_job]
+  before_action :require_same_user, only: [:job_collabs_list, :remove_collab, :destroy]
   before_action :set_user_from_name, only: [:user_applied_jobs, :user_jobs]
   before_action :require_same_user_from_name, only: [:user_applied_jobs, :user_jobs]
 
@@ -225,7 +225,7 @@ class JobsController < ApplicationController
           redirect_to jobs_path
         end
       else
-        flash[:error] = 'You can only edit jobs you have posted'
+        flash[:error] = 'You can only edit jobs you have posted or collaborate on'
         redirect_to jobs_path
       end
     end
