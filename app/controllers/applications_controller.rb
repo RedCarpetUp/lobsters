@@ -32,6 +32,7 @@ class ApplicationsController < ApplicationController
         @application.job.collaborators.each do |touser|
           StatusChange.notify(touser, @application, @job).deliver
         end
+        StatusChange.notify(@application.job.poster, @application, @job).deliver
 
         redirect_to job_application_path(@job, @application)
   	  else

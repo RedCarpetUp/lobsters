@@ -16,6 +16,7 @@ class CollcommentsController < ApplicationController
       @job.collaborators.each do |touser|
         CollcommentNotify.notify(@collcomment, @application, @job, touser).deliver
       end
+      CollcommentNotify.notify(@collcomment, @application, @job, @job.poster).deliver
       redirect_to job_application_path(@job, @application)
     else
       flash[:error] = @collcomment.errors.full_messages.to_sentence
