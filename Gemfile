@@ -43,6 +43,8 @@ gem 'mailgun_rails', '0.8.0', :path=> "vendor/gems/mailgun_rails-0.8.0"#, :requi
 
 gem "recaptcha", require: "recaptcha/rails"
 
+gem 'social-share-button'
+
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
   gem "machinist"
