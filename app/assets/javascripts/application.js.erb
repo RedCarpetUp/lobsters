@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+//= require social-share-button
 //= require_tree .
 
 "use strict";
@@ -484,4 +485,15 @@ $(document).ready(function() {
     $("#story_guidelines").toggle();
     return false;
   });
+  /*
+  $(document).on("click", ".social_modal_shower", function() {
+    var this_story_id = $(this).prop('storyid');
+    $('.share_box [storyid=this_story_id]').toggle();
+  });
+  */
+  $(".social_modal_shower").on("click", function(e){
+    var this_story_id = $(this).attr('storyid');
+    $('.share_box[storyid="'+this_story_id+'"]').slideToggle();
+  });
+
 });

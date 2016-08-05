@@ -187,6 +187,14 @@ class="story <%= story.vote && story.vote[:vote] == 1 ? "upvoted" : "" %>
         (story.downvotes >= 3 || story.score <= 0)) %>
           | <%= story.vote_summary_for(@user).downcase %>
         <% end %>
+          | <a href='#' class='social_modal_shower' storyid='<%= story.short_id %>' >share</a>
+      <% end %>
+    </div>
+    <div class="share_box" style="display: none;margin-top: 4px;"  storyid='<%= story.short_id %>'>
+      <% if defined?(single_story) && single_story %>
+        <%= social_share_button_tag(@story.title) %>
+      <% else %>
+        <%= social_share_button_tag(story.title, :url => "https://#{ Rails.application.domain }#{ url_for(story) }") %>
       <% end %>
     </div>
   </div>
