@@ -1,5 +1,10 @@
 class Story < ActiveRecord::Base
-  searchkick
+  #searchkick
+
+  include PgSearch
+  multisearchable :against => [:title, :description]
+  pg_search_scope :search_by_pg, :against => [:title, :description]
+
   belongs_to :user
   belongs_to :merged_into_story,
     :class_name => "Story",

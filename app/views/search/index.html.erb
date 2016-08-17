@@ -59,7 +59,13 @@
 
   <ol class="search_results">
     <% @search.results.each do |res| %>
-      <% if res.class == Story %>
+      <% if res.class.to_s == "PgSearch::Document" %>
+          <% if res.searchable.class == Story %>
+            <%= render :partial => "stories/listdetail", :locals => { :story => res.searchable } %>
+          <% elsif res.searchable.class == Comment %>
+            <li><%= render "comments/comment", :comment => res.searchable, :show_story => true, :hide_voters => true %></li>
+          <% end %>
+      <% elsif res.class == Story %>
         <%= render :partial => "stories/listdetail",
           :locals => { :story => res } %>
       <% elsif res.class == Comment %>

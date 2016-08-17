@@ -53,12 +53,20 @@ class Search
       #:include  => [ :story, :user ],
     }
 
+    #if order == "newest"
+    #  opts[:order] = {"created_at": :desc}
+    #elsif order == "points"
+    #  opts[:order] = {"upvotes": :desc}
+    #else
+    #  opts[:order] = {_score: :desc}
+    #end
+
     if order == "newest"
-      opts[:order] = {"created_at": :desc}
+      opts[:order] = "created_at DESC"
     elsif order == "points"
-      opts[:order] = {"upvotes": :desc}
+      opts[:order] = "upvotes DESC"
     else
-      opts[:order] = {_score: :desc}
+      opts[:order] = "_score DESC"
     end
 
     # extract domain query since it must be done separately
@@ -123,7 +131,6 @@ class Search
     #query = Riddle.escape(words)
     query = words.gsub(/(['\/~"@])/, '\\\\\1')
 
-    # go go gadget search
     self.results = []
     self.total_results = 0
     begin
@@ -136,8 +143,31 @@ class Search
 
       #self.results = Story.search(query)
 
-      self.results = Searchkick.search query, index_name: opts[:classes], order: opts[:order]
-        
+
+      #This is for searchkick
+      #self.results = Searchkick.search query, index_name: opts[:classes], order: opts[:order]
+      
+      #This is for pg_search
+      if opts[:classes].count == 1
+        if opts[:order] == "_score DESC"
+          self.results = opts[:classes].first.search_by_pg(query)
+        else
+          self.results = opts[:classes].first.search_by_pg(query).reorder(opts[:order])
+        end
+      else
+        if opts[:order] == "_score DESC"
+          self.results = PgSearch.multisearch(query)
+        elsif opts[:order] == "upvotes DESC"
+          #self.results = PgSearch.multisearch(query).reorder('searchable.upvotes')
+          #TEMPORARY HACK!!!
+          self.results = PgSearch.multisearch(query).sort_by{ |srchdoc| srchdoc.searchable.upvotes}.reverse
+        else
+          #self.results = PgSearch.multisearch(query).reorder('searchable.created_at')
+          #TEMPORARY HACK!!!
+          self.results = PgSearch.multisearch(query).sort_by{ |srchdoc| srchdoc.searchable.created_at}.reverse
+        end
+      end
+
       self.total_results = self.results.count
 
     rescue => e
@@ -149,6 +179,8 @@ class Search
     end
 
     # bind votes for both types
+
+    if opts[:classes].count == 1
 
     if opts[:classes].include?(Comment) && user
       votes = Vote.comment_votes_by_user_for_comment_ids_hash(user.id,
@@ -171,5 +203,33 @@ class Search
         end
       end
     end
+
+    else
+
+    if opts[:classes].include?(Comment) && user
+      votes = Vote.comment_votes_by_user_for_comment_ids_hash(user.id,
+        self.results.select{|r| r.searchable.class == Comment }.map{|c| c.searchable.id })
+
+      self.results.each do |r|
+        if r.searchable.class == Comment && votes[r.searchable.id]
+          r.searchable.current_vote = votes[r.searchable.id]
+        end
+      end
+    end
+
+    if opts[:classes].include?(Story) && user
+      votes = Vote.story_votes_by_user_for_story_ids_hash(user.id,
+        self.results.select{|r| r.searchable.class == Story }.map{|s| s.searchable.id })
+
+      self.results.each do |r|
+        if r.searchable.class == Story && votes[r.searchable.id]
+          r.searchable.vote = votes[r.searchable.id]
+        end
+      end
+    end
+
+    end
+
+
   end
 end
