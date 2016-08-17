@@ -1,0 +1,5 @@
+<%= @appl.name %> applied for job <%= @job.title %>
+
+To view it, go to the link below:
+
+<%= Rails.application.root_url %>/jobs/<%= @job.id %>/applications/<%= @appl.id %>

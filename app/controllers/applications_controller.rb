@@ -92,6 +92,12 @@ class ApplicationsController < ApplicationController
 
     if verify_recaptcha(model: @application) && @application.save 
       flash[:success] = "Application Created!"
+
+      @application.job.collaborators.each do |touser|
+        NewApplicant.notify(touser, @application, @job).deliver
+      end
+      NewApplicant.notify(@application.job.poster, @application, @job).deliver
+
       if Rails.application.config.anon_apply == true
         redirect_to job_path(@job)
       else
