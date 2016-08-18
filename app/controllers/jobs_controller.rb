@@ -25,7 +25,8 @@ class JobsController < ApplicationController
     end
 
     if params[:query].present?
-      @jobs = Job.where(is_deleted: false).where(is_closed: false).search(params[:query]).records.last((@jobs = Job.all.search(params[:query]).count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
+      @jobs = Job.where(is_deleted: false).where(is_closed: false).search_by_pg(params[:query])
+      @jobs = @jobs.last((@jobs.count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
     else
       @jobs = Job.where(is_deleted: false).where(is_closed: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     end

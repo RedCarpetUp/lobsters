@@ -2,7 +2,8 @@ class Job < ActiveRecord::Base
   #searchkick
 
   include PgSearch
-  multisearchable :against => [:title, :company_name, :raw_desc]
+  #multisearchable :against => [:title, :company_name, :raw_desc]
+  pg_search_scope :search_by_pg, :against => [:title, :company_name, :raw_desc]
 
   belongs_to :poster, class_name: "User"
   has_many :applications
