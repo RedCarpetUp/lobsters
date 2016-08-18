@@ -2,7 +2,7 @@ class Comment < ActiveRecord::Base
   #searchkick
 
   include PgSearch
-  multisearchable :against => [:comment]
+  ###multisearchable :against => [:comment]
   pg_search_scope :search_by_pg, :against => [:comment]
 
   belongs_to :user

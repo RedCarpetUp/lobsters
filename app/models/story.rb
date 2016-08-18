@@ -2,7 +2,7 @@ class Story < ActiveRecord::Base
   #searchkick
 
   include PgSearch
-  multisearchable :against => [:title, :description]
+  ###multisearchable :against => [:title, :description]
   pg_search_scope :search_by_pg, :against => [:title, :description]
 
   belongs_to :user
