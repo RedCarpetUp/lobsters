@@ -59,7 +59,7 @@ class ApplicationsController < ApplicationController
   end
 
   def index
-    @applications = @job.applications.where(is_deleted: false)
+    @applications = @job.applications.where(is_deleted: false).order(:created_at).reverse_order
     @title = "Applications"
   end
 

@@ -1300,3 +1300,17 @@ div.fieldWithErrors {
 .appl_table tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+ol.stories.list li.story.job_item {
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+}
+
+.box.search_box h4 {
+	margin-top: 0.4em;
+	margin-bottom: 0px;
+}
+
+.box.search_box .form-group {
+	margin-top:0.4em;
+}

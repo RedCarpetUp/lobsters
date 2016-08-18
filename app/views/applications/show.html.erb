@@ -1,4 +1,8 @@
 <div class="box">
+  <h4><%= link_to "< Back to Job" , job_path(@job.id) %></h4>
+</div>
+
+<div class="box">
 <h2 style="margin-bottom:5px;"><%= @job.is_closed ? "[ARCHIVED]" : "" %> Applicant details</h2>
 
 <% if @application.applicant == current_user && !@job.is_closed %>

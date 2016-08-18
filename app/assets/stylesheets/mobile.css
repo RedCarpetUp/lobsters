@@ -100,6 +100,7 @@
 	ol.stories.list li.story {
 		border-bottom: 1px solid #e0e0e0;
 		display: table;
+		width:100%;
 	}
 	ol.stories.list li.story div.story_liner {
 		background-color: #fbfbfb;
@@ -244,4 +245,24 @@
 		float: none;
 		padding-left: 10px;
 	}
+
+	ol.stories.list li.story.job_item {
+		border-bottom: 1px solid #e0e0e0;
+		border-top: 1px solid #e0e0e0;
+		padding-top: 0.5em;
+		padding-bottom: 0.75em;
+	}
+
+	.box.search_box {
+		margin-left: 0px;
+	}
+
+	.box.search_box .form-group {
+		margin-left: 36px;
+	}
+
+	.box.search_box h4 {
+		margin-left: 36px;
+	}
+
 }
