@@ -5,7 +5,7 @@ cd /d/rails/lobsters
 
 #sudo -u lobsters -H env RAILS_ENV=production NO_TRIPWIRE=1 bundle19 exec rake19 ts:rebuild
 
-sudo -u lobsters -H env RAILS_ENV=production NO_TRIPWIRE=1 bundle19 exec rake19 searchkick:reindex:all
+#sudo -u lobsters -H env RAILS_ENV=production NO_TRIPWIRE=1 bundle19 exec rake19 searchkick:reindex:all
 
 sudo -u lobsters -H env RAILS_ENV=production NO_TRIPWIRE=1 bundle19 exec rake19 pg_search:multisearch:rebuild[Story]
 sudo -u lobsters -H env RAILS_ENV=production NO_TRIPWIRE=1 bundle19 exec rake19 pg_search:multisearch:rebuild[Comment]
