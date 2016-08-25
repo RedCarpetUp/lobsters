@@ -1,4 +1,8 @@
 class Application < ActiveRecord::Base
+  include PgSearch
+  #multisearchable :against => [:title, :company_name, :raw_desc]
+  pg_search_scope :search_by_pg, :against => [:name, :email, :details]
+
   belongs_to :job
   belongs_to :applicant, class_name: "User"
   has_many :collcomments

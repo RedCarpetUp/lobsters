@@ -59,7 +59,18 @@ class ApplicationsController < ApplicationController
   end
 
   def index
-    @applications = @job.applications.where(is_deleted: false).order(:created_at).reverse_order
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
+    if params[:query].present?
+      @applications = @job.applications.where(is_deleted: false).search_by_pg(params[:query]).order(:created_at).reverse_order
+      @applications = @applications.last((@applications.count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
+    else
+      @applications = @job.applications.where(is_deleted: false).order(:created_at).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).reverse_order
+    end
     @title = "Applications"
   end
 
@@ -90,7 +101,7 @@ class ApplicationsController < ApplicationController
     @application.status = "Applied"
     @application.is_deleted = false
 
-    if verify_recaptcha(model: @application) && @application.save 
+    if verify_recaptcha(model: @application) && @application.save
       flash[:success] = "Application Created!"
 
       @application.job.collaborators.each do |touser|

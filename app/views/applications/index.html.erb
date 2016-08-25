@@ -8,6 +8,26 @@
   Applications
 </div>
 
+</div>
+
+
+<div class="box search_box">
+<h4>Search:</h5>
+<%= form_tag job_applications_path, method: :get do %>
+  <div class="form-group">
+    <%= text_field_tag :query, params[:query] %>
+    <%= submit_tag 'Search' %>
+    <% if params[:utf8].present? %>
+      <br>
+      <%= link_to "Show all", job_applications_path %>
+    <% end %>
+  </div>
+<% end %>
+<br>
+</div>
+
+<div class="box">
+
 <ol class="stories list">
 <table class="appl_table">
 	<tr>
@@ -21,3 +41,37 @@
 </ol>
 
 </div>
+
+<% if params[:query] %>
+<div class="morelink">
+  <% if @page && @page > 1 %>
+    <a href="/jobs/<%= @job.id %>/applications<%= @page == 2 ? "" : "/page/#{@page - 1}" %>?utf8=✓&query=<%= params[:query] %>&commit=Search">&lt;&lt; 
+      Page <%= @page - 1 %></a>
+  <% end %>
+
+  <% if @applications.count == 20 %>
+    <% if @page && @page > 1 %>
+      |
+    <% end %>
+
+    <a href="/jobs/<%= @job.id %>/applications/page/<%= @page + 1 %>?utf8=✓&query=<%= params[:query] %>&commit=Search">Page
+      <%= @page + 1 %> &gt;&gt;</a>
+  <% end %>
+</div>
+<% else %>
+<div class="morelink">
+  <% if @page && @page > 1 %>
+    <a href="/jobs/<%= @job.id %>/applications<%= @page == 2 ? "" : "/page/#{@page - 1}" %>">&lt;&lt; 
+      Page <%= @page - 1 %></a>
+  <% end %>
+
+  <% if @applications.count == 20 %>
+    <% if @page && @page > 1 %>
+      |
+    <% end %>
+
+    <a href="/jobs/<%= @job.id %>/applications/page/<%= @page + 1 %>">Page
+      <%= @page + 1 %> &gt;&gt;</a>
+  <% end %>
+</div>
+<% end %>

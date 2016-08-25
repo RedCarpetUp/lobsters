@@ -10,6 +10,10 @@
   <div class="form-group">
     <%= text_field_tag :query, params[:query] %>
     <%= submit_tag 'Search' %>
+    <% if params[:utf8].present? %>
+      <br>
+      <%= link_to "Show all", jobs_path %>
+    <% end %>
   </div>
 <% end %>
 <br>

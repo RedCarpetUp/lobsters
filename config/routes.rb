@@ -174,6 +174,8 @@ Lobsters::Application.routes.draw do
 
     get "/jobs/:job_id/applications/:id/page/:page" => "applications#show"
 
+    get "/jobs/:job_id/applications/page/:page" => "applications#index"
+
     resources :organisations do
       resources :snippets, :except => [:show]
     end
