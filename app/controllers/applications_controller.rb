@@ -18,25 +18,30 @@ class ApplicationsController < ApplicationController
 
   def change_status
   	if @application.av_status.include?(params[:status].to_s)
-      @application.status = params[:status].to_s
-      if @application.save
-        flash[:success] = "Status updated successfully"
+      if @application.status != params[:status].to_s
+        @application.status = params[:status].to_s
+        if @application.save
+          flash[:success] = "Status updated successfully"
 
-          @new_collcomm = Collcomment.new
-          @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{current_user.username} changed the status of this application to #{@application.status}"
-          @new_collcomm.application = @application
-          @new_collcomm.is_auto = true
-          @new_collcomm.is_deleted = false
-          @new_collcomm.save
+            @new_collcomm = Collcomment.new
+            @new_collcomm.body_nomark = "**AUTO-MESSAGE**: #{current_user.username} changed the status of this application to #{@application.status}"
+            @new_collcomm.application = @application
+            @new_collcomm.is_auto = true
+            @new_collcomm.is_deleted = false
+            @new_collcomm.save
 
-        @application.job.collaborators.each do |touser|
-          StatusChange.notify(touser, @application, @job).deliver
+          @application.job.collaborators.each do |touser|
+            StatusChange.notify(touser, @application, @job).deliver
+          end
+          StatusChange.notify(@application.job.poster, @application, @job).deliver
+
+          redirect_to job_application_path(@job, @application)
+    	  else
+          flash[:error] = "Status can't be updated"
+          redirect_to job_application_path(@job, @application)
         end
-        StatusChange.notify(@application.job.poster, @application, @job).deliver
-
-        redirect_to job_application_path(@job, @application)
-  	  else
-        flash[:error] = "Status can't be updated"
+      else
+        flash[:error] = "Status is already APPLIED"
         redirect_to job_application_path(@job, @application)
       end
     else

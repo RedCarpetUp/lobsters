@@ -1,5 +1,5 @@
 <div class="box">
-  <h4><%= link_to "< Back to Job" , job_path(@job.id) %></h4>
+  <h4><%= link_to "< Back to Applications" , job_applications_path(@job.id) %></h4>
 </div>
 
 <div class="box">
@@ -15,9 +15,10 @@
   <div class="box" style="float:right;">
     <h3>Current Status: <%= @application.status %></h3>
     <% if !@job.is_closed %>
-    <% @application.av_status.each do |x| %>
+    <% (@application.av_status - ["Applied"]).each do |x| %>
       <h4><%= link_to x == "Hired" ? x.upcase.chomp('D') : x.upcase.chomp('ED') , change_status_job_application_path(@job, @application, x), method: :post  %></h4>
     <% end %>
+    <h4><%= link_to "Reset".upcase , change_status_job_application_path(@job, @application, "Applied"), method: :post  %></h4>
     <% end %>
   </div>
 <% end %>

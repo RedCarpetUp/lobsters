@@ -28,13 +28,13 @@ class Application < ActiveRecord::Base
   def av_status
     case self.status
     when "Applied"
-      return ["Shortlisted", "Rejected", "Hired"]
+      return ["Shortlisted", "Rejected", "Hired", "Applied"]
     when "Shortlisted"
-      return ["Rejected", "Hired"]
+      return ["Rejected", "Hired", "Applied"]
     when "Hired"
-      return []
+      return ["Applied"]
     when "Rejected"
-      return []
+      return ["Applied"]
     end
         
   end
