@@ -46,6 +46,8 @@ gem "recaptcha", require: "recaptcha/rails"
 
 gem 'social-share-button'
 
+gem 'phonelib'
+
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
   gem "machinist"

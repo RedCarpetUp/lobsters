@@ -74,35 +74,61 @@ class JobsController < ApplicationController
 
   def user_jobs
 
+    @title = "Jobs"
+
     @page = 1
     if params[:page].to_i > 0
       @page = params[:page].to_i
     end
 
-    @user_jobs = current_user.jobs.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
-    @title = "Jobs"
+    if params[:query].present?
+      @user_jobs_orig = current_user.jobs.where(is_deleted: false)
+      @user_jobs = @user_jobs_orig.search_by_pg(params[:query])
+      @user_jobs_appls = @user_jobs_orig.where(id: Application.where(job_id: @user_jobs_orig.pluck(:id)).search_by_pg(params[:query]).pluck(:job_id).uniq)
+      @user_jobs = @user_jobs_orig.where(id: @user_jobs.pluck(:id).concat(@user_jobs_appls.pluck(:id)).uniq)
+      @user_jobs = @user_jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    else
+      @user_jobs = current_user.jobs.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    end
+
   end
 
     def user_collab_jobs
 
+    @title = "Jobs"
+
     @page = 1
     if params[:page].to_i > 0
       @page = params[:page].to_i
     end
 
-    @user_collaborations = current_user.collabjobs.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
-    @title = "Jobs"
+    if params[:query].present?
+      @user_collaborations_orig = current_user.collabjobs.where(is_deleted: false)
+      @user_collaborations = @user_collaborations_orig.search_by_pg(params[:query])
+      @user_collaborations_appls = @user_collaborations_orig.where(id: Application.where(job_id: @user_collaborations_orig.pluck(:id)).search_by_pg(params[:query]).pluck(:job_id).uniq)
+      @user_collaborations = @user_collaborations_orig.where(id: @user_collaborations.pluck(:id).concat(@user_collaborations_appls.pluck(:id)).uniq)
+      @user_collaborations = @user_collaborations.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    else
+      @user_collaborations = current_user.collabjobs.where(is_deleted: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    end
+
   end
 
   def user_applied_jobs
 
+    @title = "Jobs"
+
     @page = 1
     if params[:page].to_i > 0
       @page = params[:page].to_i
     end
 
-    @user_applications = Job.where(is_deleted: false).where(id: current_user.applications.where(is_deleted: false).pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
-    @title = "Jobs"
+    if params[:query].present?
+      @user_applications = Job.where(is_deleted: false).where(id: current_user.applications.where(is_deleted: false).pluck(:job_id).uniq).search_by_pg(params[:query]).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    else
+      @user_applications = Job.where(is_deleted: false).where(id: current_user.applications.where(is_deleted: false).pluck(:job_id).uniq).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    end
+
   end
 
   def add_collaborator
