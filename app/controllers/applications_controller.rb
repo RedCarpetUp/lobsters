@@ -241,7 +241,7 @@ class ApplicationsController < ApplicationController
     end
 
     def application_params
-      params.require(:application).permit(:name, :email, :phoneno, :details_nomark, :status)
+      params.require(:application).permit(:name, :email, :phoneno_inp, :details_nomark, :status)
     end
     
     def not_read_only

@@ -63,3 +63,5 @@ en:
         body_nomark: "Comment"
       snippet:
         body_nomark: "Snippet"
+      application:
+        phoneno_inp: "Phone number"

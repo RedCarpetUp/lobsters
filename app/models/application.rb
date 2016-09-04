@@ -15,7 +15,7 @@ class Application < ActiveRecord::Base
   validates_length_of :name, :in => 3..60
   validates :name, presence: true
   validates :email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ }, presence: true
-  validates :phoneno, presence: true, length: { is: 10 }, format: { with: /(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/ }, presence: true
+  validates :phoneno_inp, phone: { types: [:mobile] }
   validates_length_of :details_nomark, :maximum => (64 * 1024)
   validates :details_nomark, presence: true
   validates_inclusion_of :status, :in => ["Shortlisted", "Applied", "Rejected", "Hired" ]
@@ -52,4 +52,12 @@ class Application < ActiveRecord::Base
     Markdowner.to_html(self.details_nomark, { :allow_images => true })
   end
   
+  def phoneno_inp=(des)
+    self[:phoneno] = Phonelib.parse(des).international
+  end
+
+  def phoneno_inp
+    self[:phoneno]
+  end
+
 end
