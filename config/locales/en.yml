@@ -19,6 +19,7 @@ en:
     application:
       homelink: "Home"
       joblink: "Jobs"
+      managejoblink: "Manage Jobs"
       org_snip: "Snippets"
       recentlink: "Recent"
       commentslink: "Comments"

@@ -1,9 +1,3 @@
-<% if user_signed_in? %>
-  <div class="box">
-      <h4><%= link_to "Jobs posted by you" , user_jobs_path(current_user.username)  %>&nbsp&nbsp&nbsp&nbsp<%= link_to "Jobs you have applied for" , user_applications_path(current_user.username) %>&nbsp&nbsp&nbsp&nbsp<%= link_to "Jobs you collaborate for" , user_collaborations_path(current_user.username) %>&nbsp&nbsp&nbsp&nbsp<%= link_to "Post a Job" , new_job_path  %></h4>
-  </div>
-<% end %>
-
 <div class="box search_box">
 <h4>Search:</h5>
 <%= form_tag jobs_path, method: :get do %>

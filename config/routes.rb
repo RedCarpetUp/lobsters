@@ -153,6 +153,9 @@ Lobsters::Application.routes.draw do
       end
     end
 
+    get "/manage-jobs" => "jobs#manage_jobs", :as => "manage_jobs"
+    get '/manage-jobs/page/:page' => 'jobs#manage_jobs'
+
     post '/jobs/:job_id/applications/:id/change_status/:status' => "applications#change_status", :as => "change_status_job_application"
 
     post '/jobs/:id/toggle_state' => "jobs#toggle_job", :as => "toggle_job"

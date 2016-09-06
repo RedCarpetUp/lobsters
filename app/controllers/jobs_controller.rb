@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :require_user, only: [:toggle_job, :job_collabs_list, :remove_collab, :edit, :update, :destroy, :new, :create, :add_collaborator, :user_collab_jobs, :user_applied_jobs, :user_jobs, :add_collaborator_to_rel]
+  before_action :require_user, only: [:toggle_job, :job_collabs_list, :remove_collab, :edit, :update, :destroy, :new, :create, :add_collaborator, :user_collab_jobs, :user_applied_jobs, :user_jobs, :add_collaborator_to_rel, :manage_jobs]
   before_action :set_job, only: [:toggle_job, :edit, :update, :show, :destroy, :add_collaborator, :add_collaborator_to_rel, :job_collabs_list, :remove_collab]
   before_action :require_same_or_collab_user, only: [:edit, :update, :add_collaborator, :add_collaborator_to_rel, :toggle_job]
   before_action :require_same_user, only: [:job_collabs_list, :remove_collab, :destroy]
@@ -29,6 +29,37 @@ class JobsController < ApplicationController
       @jobs = @jobs.last((@jobs.count) - ((@page - 1) * ITEMS_PER_PAGE) ).first(ITEMS_PER_PAGE)
     else
       @jobs = Job.where(is_deleted: false).where(is_closed: false).offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    end
+
+  end
+
+  def manage_jobs
+    @cur_url = "/manage-jobs"
+    @title = "Manage Jobs"
+
+    @page = 1
+    if params[:page].to_i > 0
+      @page = params[:page].to_i
+    end
+
+    if params[:query].present?
+      @user_jobs_orig = current_user.jobs.where(is_deleted: false)
+      @user_jobs = @user_jobs_orig.search_by_pg(params[:query])
+      @user_jobs_appls = @user_jobs_orig.where(id: Application.where(job_id: @user_jobs_orig.pluck(:id)).search_by_pg(params[:query]).pluck(:job_id).uniq)
+      @user_jobs = @user_jobs_orig.where(id: @user_jobs.pluck(:id).concat(@user_jobs_appls.pluck(:id)).uniq)
+
+      @user_collaborations_orig = current_user.collabjobs.where(is_deleted: false)
+      @user_collaborations = @user_collaborations_orig.search_by_pg(params[:query])
+      @user_collaborations_appls = @user_collaborations_orig.where(id: Application.where(job_id: @user_collaborations_orig.pluck(:id)).search_by_pg(params[:query]).pluck(:job_id).uniq)
+      @user_collaborations = @user_collaborations_orig.where(id: @user_collaborations.pluck(:id).concat(@user_collaborations_appls.pluck(:id)).uniq)
+
+      @user_all_jobs = Job.where(is_deleted: false).where(id: @user_jobs.pluck(:id).concat(@user_collaborations.pluck(:id)).uniq)
+
+      @user_all_jobs = @user_all_jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    else
+      @user_all_jobs = Job.none
+      #@user_all_jobs = Job.where(is_deleted: false).where(id: current_user.jobs.pluck(:id).concat(current_user.collabjobs.pluck(:id)).uniq)
+      #@user_all_jobs = @user_all_jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     end
 
   end
@@ -93,7 +124,7 @@ class JobsController < ApplicationController
 
   end
 
-    def user_collab_jobs
+  def user_collab_jobs
 
     @title = "Jobs"
 

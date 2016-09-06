@@ -1314,3 +1314,13 @@ ol.stories.list li.story.job_item {
 .box.search_box .form-group {
 	margin-top:0.4em;
 }
+
+.greenbutton {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}

@@ -15,19 +15,19 @@
   <% if user_signed_in? %>
     <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user)) %>
       <% if !@job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id) %>    
-        <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+        <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
       <% end %>
     <% end %>
   <% else %>
-    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
   <% end %>
 <% else %>
   <% if user_signed_in? %>
     <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user))&&(!@job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id)) %>
-      <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+      <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
     <% end %>
   <% else %>
-    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;" %>
+    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
   <% end %>
 <% end %>
 

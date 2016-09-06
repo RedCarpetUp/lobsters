@@ -16,7 +16,7 @@
 <%= form_tag job_applications_path, method: :get do %>
   <div class="form-group">
     <%= text_field_tag :query, params[:query] %>
-    <%= submit_tag 'Search' %>
+    <%= submit_tag 'Search within these applications' %>
     <% if params[:utf8].present? %>
       <br>
       <%= link_to "Show all", job_applications_path %>

@@ -3,7 +3,7 @@ class Job < ActiveRecord::Base
 
   include PgSearch
   #multisearchable :against => [:title, :company_name, :raw_desc]
-  pg_search_scope :search_by_pg, :against => [:title, :company_name, :raw_desc]
+  pg_search_scope :search_by_pg, :against => [:title, :company_name, :raw_desc, :location]
 
   belongs_to :poster, class_name: "User"
   has_many :applications
