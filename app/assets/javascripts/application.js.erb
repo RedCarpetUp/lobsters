@@ -491,7 +491,8 @@ $(document).ready(function() {
     $('.share_box [storyid=this_story_id]').toggle();
   });
   */
-  $(".social_modal_shower").on("click", function(e){
+  $(document).on("click", ".social_modal_shower", function() {
+  //$(".social_modal_shower").click(function(){
     var this_story_id = $(this).attr('storyid');
     $('.share_box[storyid="'+this_story_id+'"]').slideToggle();
   });
