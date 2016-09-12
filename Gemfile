@@ -53,11 +53,12 @@ gem 'phonelib'
 gem 'sidekiq'
 #gem 'devise-async'
 
+gem 'puma'
+
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
   gem "machinist"
   gem "sqlite3"
   gem "faker"
   gem 'web-console', '~> 2.0'
-  gem 'puma'
 end
