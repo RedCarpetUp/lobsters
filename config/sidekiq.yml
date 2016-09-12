@@ -1,4 +1,4 @@
 production:
-  :concurrency: 7
+  :concurrency: 1
 development:
-  :concurrency: 7
+  :concurrency: 1
