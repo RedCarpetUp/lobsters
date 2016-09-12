@@ -48,10 +48,16 @@ gem 'social-share-button'
 
 gem 'phonelib'
 
+#gem 'activejob_backport'
+
+gem 'sidekiq'
+#gem 'devise-async'
+
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
   gem "machinist"
   gem "sqlite3"
   gem "faker"
   gem 'web-console', '~> 2.0'
+  gem 'puma'
 end

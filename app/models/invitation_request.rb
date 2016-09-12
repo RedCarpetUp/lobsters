@@ -28,6 +28,6 @@ class InvitationRequest < ActiveRecord::Base
   end
   
   def send_email
-    InvitationRequestMailer.invitation_request(self).deliver
+    InvitationRequestMailer.delay.invitation_request(self)
   end
 end

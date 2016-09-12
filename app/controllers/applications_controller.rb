@@ -31,9 +31,9 @@ class ApplicationsController < ApplicationController
             @new_collcomm.save
 
           @application.job.collaborators.each do |touser|
-            StatusChange.notify(touser, @application, @job).deliver
+            StatusChange.delay.notify(touser, @application, @job)
           end
-          StatusChange.notify(@application.job.poster, @application, @job).deliver
+          StatusChange.delay.notify(@application.job.poster, @application, @job)
 
           redirect_to job_application_path(@job, @application)
     	  else
@@ -110,9 +110,9 @@ class ApplicationsController < ApplicationController
       flash[:success] = "Application Created!"
 
       @application.job.collaborators.each do |touser|
-        NewApplicant.notify(touser, @application, @job).deliver
+        NewApplicant.delay.notify(touser, @application, @job)
       end
-      NewApplicant.notify(@application.job.poster, @application, @job).deliver
+      NewApplicant.delay.notify(@application.job.poster, @application, @job)
 
       if Rails.application.config.anon_apply == true
         redirect_to job_path(@job)

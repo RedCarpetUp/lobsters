@@ -32,6 +32,9 @@ module Lobsters
     config.cache_store = :file_store, "#{config.root}/tmp/cache/"
 
     config.anon_apply = true
+
+    #config.active_job.queue_adapter = :sidekiq
+
   end
 end
 

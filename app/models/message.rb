@@ -49,7 +49,7 @@ class Message < ActiveRecord::Base
 
     if self.recipient.email_messages?
       begin
-        EmailMessage.notify(self, self.recipient).deliver
+        EmailMessage.delay.notify(self, self.recipient)
       rescue => e
         Rails.logger.error "error e-mailing #{self.recipient.email}: #{e}"
       end

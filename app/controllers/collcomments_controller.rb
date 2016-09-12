@@ -14,9 +14,9 @@ class CollcommentsController < ApplicationController
     if @collcomment.save
       flash[:success] = "Comment Posted"
       @job.collaborators.each do |touser|
-        CollcommentNotify.notify(@collcomment, @application, @job, touser).deliver
+        CollcommentNotify.delay.notify(@collcomment, @application, @job, touser)
       end
-      CollcommentNotify.notify(@collcomment, @application, @job, @job.poster).deliver
+      CollcommentNotify.delay.notify(@collcomment, @application, @job, @job.poster)
       redirect_to job_application_path(@job, @application)
     else
       flash[:error] = @collcomment.errors.full_messages.to_sentence

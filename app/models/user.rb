@@ -316,7 +316,7 @@ class User < ActiveRecord::Base
     self.password_reset_token = "#{Time.now.to_i}-#{Utils.random_str(30)}"
     self.save!
 
-    PasswordReset.password_reset_link(self, ip).deliver
+    PasswordReset.delay.password_reset_link(self, ip)
   end
 
   def is_active?
