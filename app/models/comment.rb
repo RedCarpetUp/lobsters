@@ -226,7 +226,11 @@ class Comment < ActiveRecord::Base
 
         if u.email_mentions?
           begin
-            EmailReply.delay.mention(self, u)
+            if Rails.application.config.side_mail == true
+              EmailReply.delay.mention(self, u)
+            else
+              EmailReply.mention(self, u).deliver
+            end
           rescue => e
             Rails.logger.error "error e-mailing #{u.email}: #{e}"
           end
@@ -250,7 +254,11 @@ class Comment < ActiveRecord::Base
     u.id != self.user.id
       if u.email_replies?
         begin
-          EmailReply.delay.reply(self, u)
+          if Rails.application.config.side_mail == true
+            EmailReply.delay.reply(self, u)
+          else
+            EmailReply.reply(self, u).deliver
+          end
         rescue => e
           Rails.logger.error "error e-mailing #{u.email}: #{e}"
         end

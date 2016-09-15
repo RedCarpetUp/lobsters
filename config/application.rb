@@ -33,6 +33,17 @@ module Lobsters
 
     config.anon_apply = true
 
+    if Rails.env.development?
+      config.side_mail = true
+    elsif Rails.env.production?
+      if ENV["SIDE_MAIL"] == "true"
+        config.side_mail = true
+      elsif ENV["SIDE_MAIL"] == "false"
+        config.side_mail = false
+      end
+    end
+
+
     #config.active_job.queue_adapter = :sidekiq
 
   end

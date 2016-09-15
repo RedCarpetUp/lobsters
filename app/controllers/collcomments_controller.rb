@@ -14,9 +14,17 @@ class CollcommentsController < ApplicationController
     if @collcomment.save
       flash[:success] = "Comment Posted"
       @job.collaborators.each do |touser|
-        CollcommentNotify.delay.notify(@collcomment, @application, @job, touser)
+        if Rails.application.config.side_mail == true
+          CollcommentNotify.delay.notify(@collcomment, @application, @job, touser)
+        else
+          CollcommentNotify.notify(@collcomment, @application, @job, touser).deliver
+        end
       end
-      CollcommentNotify.delay.notify(@collcomment, @application, @job, @job.poster)
+      if Rails.application.config.side_mail == true
+        CollcommentNotify.delay.notify(@collcomment, @application, @job, @job.poster)
+      else
+        CollcommentNotify.notify(@collcomment, @application, @job, @job.poster).deliver
+      end
       redirect_to job_application_path(@job, @application)
     else
       flash[:error] = @collcomment.errors.full_messages.to_sentence

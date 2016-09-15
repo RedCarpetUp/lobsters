@@ -3,9 +3,9 @@ namespace :snippets_notifn do
   task send_mails: :environment do
     if Time.now.strftime("%w") == "5"
   	  Organisation.all.each do |org|
-  		  SnipReminder.delay.notify(org.owner.id, org.id)#.deliver_later
+  		  SnipReminder.notify(org.owner.id, org.id).deliver#.deliver_later
   		  org.users.each do |us|
-  			  SnipReminder.delay.notify(us.id, org.id)#.deliver_later
+  			  SnipReminder.notify(us.id, org.id).deliver#.deliver_later
   		  end
   	  end
       puts "Emailed, today is Friday"

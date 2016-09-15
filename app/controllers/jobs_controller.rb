@@ -192,7 +192,11 @@ class JobsController < ApplicationController
           @new_collcomm.save
         end
         @job.collaborators.each do |touser|
-          CollabsChange.delay.notify("added", touser, @new_collab_user, @job)
+          if Rails.application.config.side_mail == true
+            CollabsChange.delay.notify("added", touser, @new_collab_user, @job)
+          else
+            CollabsChange.notify("added", touser, @new_collab_user, @job).deliver
+          end
         end
         redirect_to job_path(@job)
       else
@@ -228,9 +232,17 @@ class JobsController < ApplicationController
           @new_collcomm.save
         end
         @job.collaborators.each do |touser|
-          CollabsChange.delay.notify("removed", touser, @rem_collab_user, @job)
+          if Rails.application.config.side_mail == true
+            CollabsChange.delay.notify("removed", touser, @rem_collab_user, @job)
+          else
+            CollabsChange.notify("removed", touser, @rem_collab_user, @job).deliver
+          end
         end
-        CollabsChange.delay.notify("removed", @rem_collab_user, @rem_collab_user, @job)
+        if Rails.application.config.side_mail == true
+          CollabsChange.delay.notify("removed", @rem_collab_user, @rem_collab_user, @job)
+        else
+          CollabsChange.notify("removed", @rem_collab_user, @rem_collab_user, @job).deliver
+        end
         redirect_to job_collabs_path(@job)
       else
         flash[:error] = 'User can\'t be removed as collaborator'

@@ -70,7 +70,11 @@ class OrganisationsController < ApplicationController
       if @organisation.users.include?(@new_member_user)
         flash[:success] = 'Member added as successfully!'
         @organisation.users.each do |touser|
-          MembersChange.delay.notify("added", touser, @new_member_user, @organisation)
+          if Rails.application.config.side_mail == true
+            MembersChange.delay.notify("added", touser, @new_member_user, @organisation)
+          else
+            MembersChange.notify("added", touser, @new_member_user, @organisation).deliver
+          end
         end
         redirect_to organisation_path(@organisation)
       else
@@ -99,9 +103,17 @@ class OrganisationsController < ApplicationController
       if !@organisation.users.include?(@rem_member_user)
         flash[:success] = 'User removed from members successfully!'
         @organisation.users.each do |touser|
-          MembersChange.delay.notify("removed", touser, @rem_member_user, @organisation)
+          if Rails.application.config.side_mail == true
+            MembersChange.delay.notify("removed", touser, @rem_member_user, @organisation)
+          else
+            MembersChange.notify("removed", touser, @rem_member_user, @organisation).deliver
+          end
         end
-        MembersChange.delay.notify("removed", @rem_member_user, @rem_member_user, @organisation)
+        if Rails.application.config.side_mail == true
+          MembersChange.delay.notify("removed", @rem_member_user, @rem_member_user, @organisation)
+        else
+          MembersChange.notify("removed", @rem_member_user, @rem_member_user, @organisation).deliver
+        end
         redirect_to organisation_path(@organisation)
       else
         flash[:error] = 'User can\'t be removed'

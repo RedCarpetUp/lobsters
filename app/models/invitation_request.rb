@@ -28,6 +28,10 @@ class InvitationRequest < ActiveRecord::Base
   end
   
   def send_email
-    InvitationRequestMailer.delay.invitation_request(self)
+    if Rails.application.config.side_mail == true
+      InvitationRequestMailer.delay.invitation_request(self)
+    else
+      InvitationRequestMailer.invitation_request(self).deliver
+    end
   end
 end

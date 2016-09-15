@@ -31,9 +31,17 @@ class ApplicationsController < ApplicationController
             @new_collcomm.save
 
           @application.job.collaborators.each do |touser|
-            StatusChange.delay.notify(touser, @application, @job)
+            if Rails.application.config.side_mail == true
+              StatusChange.delay.notify(touser, @application, @job)
+            else
+              StatusChange.notify(touser, @application, @job).deliver
+            end
           end
-          StatusChange.delay.notify(@application.job.poster, @application, @job)
+          if Rails.application.config.side_mail == true
+            StatusChange.delay.notify(@application.job.poster, @application, @job)
+          else
+            StatusChange.notify(@application.job.poster, @application, @job).deliver
+          end
 
           redirect_to job_application_path(@job, @application)
     	  else
@@ -110,9 +118,17 @@ class ApplicationsController < ApplicationController
       flash[:success] = "Application Created!"
 
       @application.job.collaborators.each do |touser|
-        NewApplicant.delay.notify(touser, @application, @job)
+        if Rails.application.config.side_mail == true
+          NewApplicant.delay.notify(touser, @application, @job)
+        else
+          NewApplicant.notify(touser, @application, @job).deliver
+        end
       end
-      NewApplicant.delay.notify(@application.job.poster, @application, @job)
+      if Rails.application.config.side_mail == true
+        NewApplicant.delay.notify(@application.job.poster, @application, @job)
+      else
+        NewApplicant.notify(@application.job.poster, @application, @job).deliver
+      end
 
       if Rails.application.config.anon_apply == true
         redirect_to job_path(@job)
