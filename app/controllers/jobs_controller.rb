@@ -57,7 +57,8 @@ class JobsController < ApplicationController
 
       @user_all_jobs = @user_all_jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     else
-      @user_all_jobs = Job.none
+      @user_all_jobs = current_user.jobs.where(is_deleted: false)
+      @user_all_jobs = @user_all_jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
       #@user_all_jobs = Job.where(is_deleted: false).where(id: current_user.jobs.pluck(:id).concat(current_user.collabjobs.pluck(:id)).uniq)
       #@user_all_jobs = @user_all_jobs.offset((@page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
     end

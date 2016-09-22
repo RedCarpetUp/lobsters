@@ -55,18 +55,20 @@
           "/comments" => t('.commentslink')
         } %>
 
+        <% links.merge!({ "/search" => t('.searchlink') }) %>
+
+        <% links.merge!({ "/jobs" => t('.joblink') }) %>
+
+        <% links.merge!({ "/organisations" => t('.org_snip') }) %>
+
         <% if @user && @user.can_submit_stories? %>
           <% links.merge!({ "/threads" => t('.yourthreadslink'),
             "/stories/new" => t('.submitstorylink') }) %>
         <% end %>
 
-        <% links.merge!({ "/search" => t('.searchlink') }) %>
-
-        <% links.merge!({ "/jobs" => t('.joblink') }) %>
-
+        <% if @user %>
         <% links.merge!({ "/manage-jobs" => t('.managejoblink') }) %>
-
-        <% links.merge!({ "/organisations" => t('.org_snip') }) %>
+        <% end %>
 
         <% if @cur_url.present? && !links.keys.include?(@cur_url) &&
         @heading.present? %>
@@ -79,6 +81,9 @@
           <% links.each do |u,v| %>
             <a href="<%= u %>" <%= u == @cur_url ? raw("class=\"cur_url\"") :
               "" %>><%= v %></a>
+            <% if v == t('.org_snip') %>
+              <br class="nonomobx"><div class="nonomob" style="display:inline-block;width:30px;height:1em;"></div>
+            <% end %>
           <% end %>
         </span>
 
