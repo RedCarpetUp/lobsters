@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160731134025) do
+ActiveRecord::Schema.define(version: 20160922210200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 20160731134025) do
     t.integer  "applicant_id"
     t.text     "raw_details"
     t.boolean  "is_deleted"
+    t.string   "referrer_name"
+    t.string   "referrer_email"
+    t.string   "referrer_phone"
   end
 
   create_table "collabjobs_collaborators", id: false, force: true do |t|
@@ -126,6 +129,7 @@ ActiveRecord::Schema.define(version: 20160731134025) do
     t.text     "raw_desc"
     t.boolean  "is_deleted"
     t.boolean  "is_closed"
+    t.decimal  "referral_incentive"
   end
 
   create_table "keystores", id: false, force: true do |t|

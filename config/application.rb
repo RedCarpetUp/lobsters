@@ -34,7 +34,7 @@ module Lobsters
     config.anon_apply = true
 
     if Rails.env.development?
-      config.side_mail = true
+      config.side_mail = false
     elsif Rails.env.production?
       if ENV["SIDE_MAIL"] == "true"
         config.side_mail = true

@@ -120,14 +120,26 @@ class ApplicationsController < ApplicationController
       @application.job.collaborators.each do |touser|
         if Rails.application.config.side_mail == true
           NewApplicant.delay.notify(touser, @application, @job)
+          if !@application.referrer_name.blank?
+            NewApplicantByRef.delay.notify(@application.referrer_email, @application, @job)
+          end
         else
           NewApplicant.notify(touser, @application, @job).deliver
+          if !@application.referrer_name.blank?
+            NewApplicantByRef.notify(@application.referrer_email, @application, @job).deliver
+          end
         end
       end
       if Rails.application.config.side_mail == true
         NewApplicant.delay.notify(@application.job.poster, @application, @job)
+        if !@application.referrer_name.blank?
+          NewApplicantByRef.delay.notify(@application.referrer_email, @application, @job)
+        end
       else
         NewApplicant.notify(@application.job.poster, @application, @job).deliver
+        if !@application.referrer_name.blank?
+          NewApplicantByRef.notify(@application.referrer_email, @application, @job).deliver
+        end
       end
 
       if Rails.application.config.anon_apply == true
@@ -257,7 +269,11 @@ class ApplicationsController < ApplicationController
     end
 
     def application_params
-      params.require(:application).permit(:name, :email, :phoneno_inp, :details_nomark, :status)
+      if !@job.referral_incentive.nil?
+        params.require(:application).permit(:name, :email, :phoneno_inp, :details_nomark, :status, :referrer_name, :referrer_email, :referrer_phone_inp)
+      else
+        params.require(:application).permit(:name, :email, :phoneno_inp, :details_nomark, :status)
+      end
     end
     
     def not_read_only

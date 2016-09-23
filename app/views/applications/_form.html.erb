@@ -42,6 +42,31 @@
 </div>
 <br>
 
+<% if !@job.referral_incentive.nil? %>
+
+<div class="boxline">
+<%= f.label :referrer_name, :class => "required" %>
+<%= f.text_field :referrer_name, :maxlength => 100 %>
+<div class="hintblock">Leave blank if no referrer</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :referrer_email, :class => "required" %>
+<%= f.email_field :referrer_email, :maxlength => 100 %>
+<div class="hintblock">Leave blank if no referrer</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :referrer_phone_inp, :class => "required" %>
+<%= f.telephone_field :referrer_phone_inp, :maxlength => 100 %>
+<div class="hintblock">Leave blank if no referrer</div>
+</div>
+<br>
+
+<% end %>
+
 <%= recaptcha_tags %>
 
 </div>

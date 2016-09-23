@@ -66,3 +66,4 @@ en:
         body_nomark: "Snippet"
       application:
         phoneno_inp: "Phone number"
+        referrer_phone_inp: "Referrer Phone No"

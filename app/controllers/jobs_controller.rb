@@ -330,7 +330,7 @@ class JobsController < ApplicationController
     end
 
     def job_params
-      params.require(:job).permit(:title, :company_name, :intro, :desc_nomark, :pay, :location, :req_subs)
+      params.require(:job).permit(:title, :company_name, :intro, :desc_nomark, :pay, :location, :req_subs, :referral_incentive)
     end
     
     def not_read_only

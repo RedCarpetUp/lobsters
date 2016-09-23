@@ -21,6 +21,10 @@ class Application < ActiveRecord::Base
   validates_inclusion_of :status, :in => ["Shortlisted", "Applied", "Rejected", "Hired" ]
   validates :status, presence: true
 
+  #validates :referrer_name
+  validates :referrer_email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ }, :allow_blank => true
+  validates :referrer_phone_inp, phone: { types: [:mobile] }, :allow_nil => true
+
   def is_new?
     self.new_record? ? true : false
   end
@@ -58,6 +62,14 @@ class Application < ActiveRecord::Base
 
   def phoneno_inp
     self[:phoneno]
+  end
+
+  def referrer_phone_inp=(des)
+    self[:referrer_phone] = Phonelib.parse(des).international
+  end
+
+  def referrer_phone_inp
+    self[:referrer_phone]
   end
 
 end

@@ -19,6 +19,8 @@ class Job < ActiveRecord::Base
   validates  :desc_nomark, presence: true
   validates_length_of :location, :in => 3..60
 
+  validates :referral_incentive, numericality: { greater_than: 100, allow_nil: true }
+
   def desc_nomark=(des)
     self[:raw_desc] = des.to_s.rstrip
     self.desc = self.generated_markeddown_desc

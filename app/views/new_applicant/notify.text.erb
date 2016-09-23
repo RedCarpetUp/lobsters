@@ -1,5 +1,11 @@
 <%= @appl.name %> applied for job <%= @job.title %>
 
+<% if !@job.referral_incentive.nil?  && !@appl.referrer_name.blank? %>
+
+This applicant was referred by <%= @appl.referrer_name %> (<%= @appl.referrer_email %>).
+
+<% end %>
+
 To view it, go to the link below:
 
 <%= Rails.application.root_url %>/jobs/<%= @job.id %>/applications/<%= @appl.id %>

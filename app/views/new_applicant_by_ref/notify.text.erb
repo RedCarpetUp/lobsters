@@ -1,0 +1,11 @@
+<%= @appl.name %> applied for job <%= @job.title %> by your reference.
+
+<% if !@job.referral_incentive.nil? %>
+
+If <%= @appl.name %> is selected for job, you will be up for receiving thr referral incentive amount. Check the job listing for more details.
+
+<% end %>
+
+To view the job, go to the link below:
+
+<%= Rails.application.root_url %>/jobs/<%= @job.id %>
