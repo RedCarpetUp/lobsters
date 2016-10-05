@@ -6,7 +6,8 @@ class ApplQuestionsController < ApplicationController
   end
   before_action :set_job
   before_action :set_application
-  before_action :set_applquestion, only: [:show, :update, :destroy]
+  before_action :set_applquestion_urlkey, only: [:show]
+  before_action :set_applquestion_id, only: [:update, :destroy]
 
   before_action :not_read_only, only: [:update]
 
@@ -18,7 +19,7 @@ class ApplQuestionsController < ApplicationController
   end
 
   if Rails.application.config.anon_apply == true
-    before_action :require_applicant_ornah, only: [:show]
+    before_action :require_not_collabs_or_appl_ornah, only: [:show]
   end
 
   before_action :require_not_collab, only: [:update]
@@ -47,7 +48,7 @@ class ApplQuestionsController < ApplicationController
       else
         QuestionAnsweredNotify.notify(@applquestion, @application, @job.poster).deliver
       end
-      redirect_to job_application_appl_question_path(@job, @application, @applquestion)
+      redirect_to job_application_appl_question_show_path(@job, @application, @applquestion.urlkey)
     else
       render :show
     end
@@ -62,6 +63,7 @@ class ApplQuestionsController < ApplicationController
     @applquestion = ApplQuestion.new(applquestion_ask_params)
     @applquestion.application = @application
     @applquestion.asker = current_user
+    @applquestion.urlkey = SecureRandom.hex(8)
     @applquestion.is_deleted = false
     if @applquestion.save
       flash[:success] = "Question Posted"
@@ -115,8 +117,14 @@ class ApplQuestionsController < ApplicationController
       @application = @job.applications.where(is_deleted: false).find(params[:application_id])
     end
 
-    def set_applquestion
+    def set_applquestion_urlkey
+      #@applquestion = @application.appl_questions.where(:is_deleted => false).find(params[:id])
+      @applquestion = @application.appl_questions.where(:is_deleted => false).where(:urlkey => params[:urlkey]).first
+    end
+
+    def set_applquestion_id
       @applquestion = @application.appl_questions.where(:is_deleted => false).find(params[:id])
+      #@applquestion = @application.appl_questions.where(:is_deleted => false).where(:urlkey => params[:urlkey]).first
     end
 
     def collab_ornah
@@ -188,11 +196,21 @@ class ApplQuestionsController < ApplicationController
       end
     end
 
-    def require_applicant_ornah
+    def require_not_collabs_or_appl_ornah
       if !@application.applicant_id.nil?
-        if ((!user_signed_in?)||(current_user != @application.applicant))
-            flash[:error] = 'You are not allowed to view this'
+        if user_signed_in?
+          if ((current_user != @application.applicant)&&(@job.collaborators.include?(current_user))&&(current_user == @job.poster))
+            flash[:error] = 'You are not allowed to view thixs'
             redirect_to job_path(@job)
+          end
+        else
+          flash[:error] = 'You are not allowed to view thixs'
+          redirect_to job_path(@job)
+        end
+      else
+        if user_signed_in?
+          flash[:error] = 'You are not allowed to view thixs'
+          redirect_to job_path(@job)
         end
       end
     end

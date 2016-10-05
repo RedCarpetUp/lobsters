@@ -12,14 +12,14 @@
     <span class="link">
           <% if applquestion.answer.nil? %>
           	<% if current_user == applquestion.application.applicant %>
-          		<%= link_to job_application_appl_question_show_path(@job, @application, applquestion) do %>
+          		<%= link_to job_application_appl_question_show_path(@job, @application, applquestion.urlkey) do %>
           			ANSWER
           		<% end %>
           	<% else %>
           		<em>Unanswered</em>
           	<% end %>
           <% else %>
-          	<%= link_to job_application_appl_question_show_path(@job, @application, applquestion) do %>
+          	<%= link_to job_application_appl_question_show_path(@job, @application, applquestion.urlkey) do %>
           		See Answer
           	<% end %>
           <% end %>
