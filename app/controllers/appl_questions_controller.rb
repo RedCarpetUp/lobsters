@@ -200,17 +200,19 @@ class ApplQuestionsController < ApplicationController
       if !@application.applicant_id.nil?
         if user_signed_in?
           if ((current_user != @application.applicant)&&(@job.collaborators.include?(current_user))&&(current_user == @job.poster))
-            flash[:error] = 'You are not allowed to view thixs'
+            flash[:error] = 'You are not allowed to view this'
             redirect_to job_path(@job)
           end
         else
-          flash[:error] = 'You are not allowed to view thixs'
+          flash[:error] = 'You are not allowed to view this'
           redirect_to job_path(@job)
         end
       else
         if user_signed_in?
-          flash[:error] = 'You are not allowed to view thixs'
-          redirect_to job_path(@job)
+          if ((@job.collaborators.include?(current_user))&&(current_user == @job.poster))
+            flash[:error] = 'You are not allowed to view this'
+            redirect_to job_path(@job)
+          end
         end
       end
     end
