@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922210200) do
+ActiveRecord::Schema.define(version: 20161004224729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "appl_questions", force: true do |t|
+    t.text     "question"
+    t.text     "answer"
+    t.text     "raw_answer"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "asker_id"
+    t.integer  "application_id"
+    t.boolean  "is_deleted"
+  end
 
   create_table "applications", force: true do |t|
     t.string   "name"

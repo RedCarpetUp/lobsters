@@ -64,6 +64,8 @@ en:
         body_nomark: "Comment"
       snippet:
         body_nomark: "Snippet"
+      appl_question:
+        answer_nomark: "Answer"
       application:
         phoneno_inp: "Phone number"
         referrer_phone_inp: "Referrer Phone No"

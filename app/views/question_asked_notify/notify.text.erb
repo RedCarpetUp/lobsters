@@ -1,0 +1,5 @@
+<%= @user == @applquestion.asker ? "You have" : @applquestion.asker.username+" has" %> asked a question to <%= @application.name %> in hiring for job <%= @application.job.title %>.
+
+To see this question, go to link below:
+
+<%= Rails.application.root_url %>jobs/<%= @application.job.id %>/applications/<%= @application.id %>/appl_questions/<%= @applquestion.id %>

@@ -1,0 +1,33 @@
+<div class="box">
+  <h4><%= link_to "< Back to Application" , job_application_path(@job.id, @application.id) %>&nbsp&nbsp&nbsp<%= link_to "< Back to Job" , job_path(@job.id) %></h4>
+</div>
+
+<%= form_for [@job, @application, @applquestion], :url => job_application_appl_questions_path(@job, @application) do |f| %>
+
+<% if f.object.errors.any? %>
+  <%= error_messages_for f.object %>
+<% end %>
+
+<div class="box">
+
+<div class="legend">
+  Ask a question
+</div>
+
+<div class="boxline">
+<%= f.label :question, "Question", :class => "required" %>
+<%= f.text_field :question, :style => "width: 709px !important;" %>
+<div class="hintblock">Note: Applicant can answer in markdown with images, so rich details can be asked.</div>
+</div>
+<br>
+
+</div>
+
+<div class="box">
+<div class="boxline actions">
+	<%= f.submit('Ask') %>
+</div>
+</div>
+
+
+<% end %>

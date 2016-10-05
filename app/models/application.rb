@@ -7,6 +7,8 @@ class Application < ActiveRecord::Base
   belongs_to :applicant, class_name: "User"
   has_many :collcomments
 
+  has_many :appl_questions
+
   if Rails.application.config.anon_apply != true
     validates :applicant_id, presence: true
     validates :applicant_id, uniq_app: true, if: :is_new?

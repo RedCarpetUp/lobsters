@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   has_many :jobs, foreign_key: "poster_id"
   has_many :applications, foreign_key: "applicant_id"
 
+  has_many :appl_questions, foreign_key: "asker_id"
+
   has_and_belongs_to_many :collabjobs, :join_table => :collabjobs_collaborators, foreign_key: "collabjob_id", class_name: "Job", association_foreign_key: "collaborator_id"
 
   has_and_belongs_to_many :organisations, :join_table => :organisations_users, foreign_key: "organisation_id", class_name: "Organisation", association_foreign_key: "user_id"

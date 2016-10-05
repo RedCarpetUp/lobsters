@@ -1,0 +1,28 @@
+<li class="story job_item">
+  <div class="details">
+    <span class="link">
+          <%= applquestion.question %>
+    </span>
+    <% if ((applquestion.application.job.collaborators.include?(current_user))||(applquestion.application.job.poster == current_user)) %> 
+    <div class="byline">
+        <a href="/u/<%= applquestion.asker.username %>" class="new_user"><%= applquestion.asker.username %></a>
+        <%= time_ago_in_words_label(applquestion.created_at, :strip_about => true) %>
+    </div>
+    <% end %>
+    <span class="link">
+          <% if applquestion.answer.nil? %>
+          	<% if current_user == applquestion.application.applicant %>
+          		<%= link_to job_application_appl_question_show_path(@job, @application, applquestion) do %>
+          			ANSWER
+          		<% end %>
+          	<% else %>
+          		<em>Unanswered</em>
+          	<% end %>
+          <% else %>
+          	<%= link_to job_application_appl_question_show_path(@job, @application, applquestion) do %>
+          		See Answer
+          	<% end %>
+          <% end %>
+    </span>
+  </div>
+</li>

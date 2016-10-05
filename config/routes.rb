@@ -150,8 +150,10 @@ Lobsters::Application.routes.draw do
     resources :jobs do
       resources :applications do
         resources :collcomments, :only => [:create]
+        resources :appl_questions, :except => [:edit, :show]
       end
     end
+    get '/jobs/:job_id/applications/:application_id/appl_questions/:id' => 'appl_questions#show', :as => "job_application_appl_question_show"
 
     get "/manage-jobs" => "jobs#manage_jobs", :as => "manage_jobs"
     get '/manage-jobs/page/:page' => 'jobs#manage_jobs'

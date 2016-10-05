@@ -1,0 +1,8 @@
+<div class="box">
+  <h4><%= link_to "< Back to Application" , job_application_path(@job.id, @application.id) %>&nbsp&nbsp&nbsp<%= link_to "< Back to Job" , job_path(@job.id) %></h4>
+</div>
+
+<ol class="stories list">
+  <%= render :partial => "appl_questions/listitem", :collection => @applquestions,
+    :as => :applquestion %>
+</ol>

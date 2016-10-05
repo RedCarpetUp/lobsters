@@ -1,0 +1,67 @@
+<div class="box">
+  <h4><% if (@job.collaborators.include?(current_user))||(@job.poster == current_user)||((!@application.applicant_id.nil?)&&(@application.applicant == current_user)) %><%= link_to "< Back to Application" , job_application_path(@job.id, @application.id) %>&nbsp&nbsp&nbsp<% end %><%= link_to "< Back to Job" , job_path(@job.id) %></h4>
+</div>
+
+<div class="box">
+<div class="legend">
+  <%= @applquestion.question %>
+</div>
+</div>
+
+<% if @applquestion.answer.nil? %>
+  <% if (((@applquestion.application.applicant_id.nil?)&&(!user_signed_in?))||((!@applquestion.application.applicant_id.nil?)&&(current_user == @applquestion.application.applicant))) %>
+    <%= form_for [@job, @application, @applquestion], :url => job_application_appl_question_path(@job, @application, @applquestion) do |f| %>
+
+    <% if f.object.errors.any? %>
+      <%= error_messages_for f.object %>
+    <% end %>
+
+    <div class="box">
+
+    <div class="legend">
+      Answer question
+    </div>
+
+    <div class="boxline">
+    <%= f.label :answer_nomark, "Question", :class => "required" %>
+    <%= f.text_area :answer_nomark, :style => "width: 709px !important;", :rows => 5 %>
+    <div class="hintblock">You can answer in markdown with images.</div>
+    </div>
+    <br>
+
+    </div>
+
+    <div class="box">
+    <div class="boxline actions">
+
+          <div class="box">
+            <div class="boxline actions markdown_help_toggler">
+              <div class="markdown_help_label">
+                Markdown formatting available
+              </div>
+
+    			<%= f.submit('Answer') %>
+
+              <div style="clear: both;"></div>
+
+              <%= render :partial => "global/markdownhelp",
+                :locals => { :allow_images => true } %>
+            </div>
+          </div>
+
+    </div>
+    </div>
+    <% end %>
+
+  <% else %>
+    <div class="box">
+    The applicant hasn't answered this yet.
+    </div>
+  <% end %>
+<% else %>
+  <% if (@job.collaborators.include?(current_user))||(@job.poster == current_user)||((!@application.applicant_id.nil?)&&(@application.applicant == current_user)) %>
+    <div class="box">
+      <%= raw @applquestion.answer %>
+    </div>
+  <% end %>
+<% end %>

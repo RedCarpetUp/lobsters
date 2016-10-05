@@ -19,16 +19,19 @@
       <h4><%= link_to x == "Hired" ? x.upcase.chomp('D') : x.upcase.chomp('ED') , change_status_job_application_path(@job, @application, x), method: :post  %></h4>
     <% end %>
     <h4><%= link_to "Reset".upcase , change_status_job_application_path(@job, @application, "Applied"), method: :post  %></h4>
+    <h4><%= link_to "Ask a Question".upcase , new_job_application_appl_question_path(@job, @application) %></h4>
+    <h4><%= link_to "See Questions".upcase , job_application_appl_questions_path(@job, @application) %></h4>
     <% end %>
   </div>
 <% end %>
 
 <% if @application.applicant == current_user && !@job.is_closed %>
-  <% if @application.status == "Hired" %>
   <div class="box" style="float:right;">
-    <h3>Status: <%= @application.status %></h3>
+    <% if @application.status == "Hired" %>
+      <h3>Status: <%= @application.status %></h3>
+    <% end %>
+    <h4><%= link_to "See Questions".upcase , job_application_appl_questions_path(@job, @application) %></h4>
   </div>
-  <% end %>
 <% end %>
 
 <h3>Name</h3>

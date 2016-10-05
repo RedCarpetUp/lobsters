@@ -1,0 +1,5 @@
+You have been asked a question for your application to job <%= @application.job.title %>.
+
+To answer this question, go to link below:
+
+<%= Rails.application.root_url %>jobs/<%= @application.job.id %>/applications/<%= @application.id %>/appl_questions/<%= @applquestion.id %>
