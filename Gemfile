@@ -21,6 +21,7 @@ gem "uglifier", ">= 1.3.0"
 gem "jquery-rails"
 gem "dynamic_form"
 
+
 gem "exception_notification"
 
 #gem "bcrypt", "~> 3.1.2"
