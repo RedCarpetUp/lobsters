@@ -38,3 +38,6 @@ config/unicorn.conf.rb
 
 #Keep admins_seed file secret
 lib/tasks/admins_seed.rake
+
+#Ignore gemset name specification
+.ruby-gemset
