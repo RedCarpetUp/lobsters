@@ -1,4 +1,4 @@
-<%= @appl.name %> applied for job <%= @job.title %>
+<%= @appl.name %> <% if !@job.referral_incentive.nil?  && !@appl.referrer_name.blank? %>was <% end %>applied for job <%= @job.title %>
 
 <% if !@job.referral_incentive.nil?  && !@appl.referrer_name.blank? %>
 

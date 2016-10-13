@@ -8,4 +8,17 @@
 </td>
 <td><%= time_ago_in_words_label(application.created_at, :strip_about => true) %></td>
 <td><%= application.status %></td>
+<% if !@job.referral_incentive.nil? %>
+<td>
+<% if application.is_referred %>
+<span class="link">
+    <%= link_to job_application_referrer_path(@job, application) do %>
+		<%= application.referrer_name %>
+	<% end %>
+</span>
+<% else %>
+	<em style="color:grey;">Self Applied</em>
+<% end %>
+</td>
+<% end %>
 </tr>

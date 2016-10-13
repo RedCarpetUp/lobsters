@@ -33,6 +33,8 @@
 
 <% if user_signed_in? && @job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id) %>
  <%= link_to "SEE YOUR APPLICATION", job_application_path(@job, Application.where(is_deleted: false).where(:applicant_id => current_user.id, :job_id => @job.id).first), :style => "float:right;" %>
+<% else %>
+<br><%= link_to "REFER APPLICANT", new_job_application_ref_path(@job), :style => "float:right;", :class => "greenbutton" %>
 <% end %>
 
 <% if user_signed_in? && ((current_user == @job.poster)||(@job.collaborators.include?(current_user))) %>

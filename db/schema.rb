@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005081930) do
+ActiveRecord::Schema.define(version: 20161013181045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20161005081930) do
     t.string   "referrer_name"
     t.string   "referrer_email"
     t.string   "referrer_phone"
+    t.boolean  "is_referred"
   end
 
   create_table "collabjobs_collaborators", id: false, force: true do |t|

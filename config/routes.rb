@@ -147,12 +147,17 @@ Lobsters::Application.routes.draw do
       get "/bbs" => "bbs#index"
     end
 
+    get "/jobs/:job_id/applications/new_ref" => "applications#new_ref", :as => "new_job_application_ref"
+    post "/jobs/:job_id/applications/by_ref" => "applications#create_ref", :as => "create_job_application_ref"
+
     resources :jobs do
       resources :applications do
         resources :collcomments, :only => [:create]
         resources :appl_questions, :except => [:edit, :show]
       end
+      get "/applications/:id/referrer_details" => "applications#referrer_details", :as => "application_referrer"
     end
+
     get '/jobs/:job_id/applications/:application_id/appl_questions/:urlkey' => 'appl_questions#show', :as => "job_application_appl_question_show"
 
     get "/manage-jobs" => "jobs#manage_jobs", :as => "manage_jobs"

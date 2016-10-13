@@ -1,0 +1,22 @@
+<div class="box">
+  <h4><%= link_to "< Back to Applications" , job_applications_path(@job.id) %>&nbsp&nbsp&nbsp<%= link_to "< Back to Job" , job_path(@job.id) %></h4>
+</div>
+
+<div class="box">
+<h2 style="margin-bottom:5px;">Referrer's details</h2>
+
+<div class="box">
+
+<h3>Name: </h3>
+<%= @application.referrer_name %>
+<br>
+<h3>Name: </h3>
+<%= @application.referrer_email %>
+<br>
+<h3>Name: </h3>
+<%= @application.referrer_phone %>
+<br>
+
+</div>
+
+</div>

@@ -1,20 +1,24 @@
 class ApplicationsController < ApplicationController
   if Rails.application.config.anon_apply == true
-    before_action :require_user, except: [:new, :create]
+    before_action :require_user, except: [:new, :create, :new_ref, :create_ref]
   else
-    before_action :require_user
+    before_action :require_user, except: [:new_ref, :create_ref]
   end
 
   ITEMS_PER_PAGE = 20
 
   before_action :set_job
-  before_action :set_application, only: [:edit, :update, :show, :destroy, :change_status]
+  before_action :set_application, only: [:edit, :update, :show, :destroy, :change_status, :referrer_details]
   before_action :require_same_user, only: [:edit, :update, :destroy]
   before_action :require_poster_or_collab, only: [:change_status, :index]
-  before_action :require_poster_or_collab_or_applicant, only: [:show]
+  before_action :require_poster_or_collab_or_applicant, only: [:show, :referrer_details]
   before_action :require_not_poster_or_collab, only: [:new, :create]
  
-  before_action :not_read_only, only:[:change_status, :new, :create, :edit, :update, :destroy]
+  before_action :not_read_only, only: [:change_status, :new_ref, :create_ref, :new, :create, :edit, :update, :destroy]
+
+  before_action :require_referrable, only: [:new_ref, :create_ref]
+
+  before_action :require_is_referred, only: [:referrer_details]
 
   def change_status
   	if @application.av_status.include?(params[:status].to_s)
@@ -113,6 +117,7 @@ class ApplicationsController < ApplicationController
     @application.job = Job.find(params[:job_id])
     @application.status = "Applied"
     @application.is_deleted = false
+    @application.is_referred = false
 
     if verify_recaptcha(model: @application) && @application.save
       flash[:success] = "Application Created!"
@@ -120,14 +125,53 @@ class ApplicationsController < ApplicationController
       @application.job.collaborators.each do |touser|
         if Rails.application.config.side_mail == true
           NewApplicant.delay.notify(touser, @application, @job)
-          if !@application.referrer_name.blank?
-            NewApplicantByRef.delay.notify(@application.referrer_email, @application, @job)
-          end
         else
           NewApplicant.notify(touser, @application, @job).deliver
-          if !@application.referrer_name.blank?
-            NewApplicantByRef.notify(@application.referrer_email, @application, @job).deliver
-          end
+        end
+      end
+      if Rails.application.config.side_mail == true
+        NewApplicant.delay.notify(@application.job.poster, @application, @job)
+      else
+        NewApplicant.notify(@application.job.poster, @application, @job).deliver
+      end
+
+      if Rails.application.config.anon_apply == true
+        redirect_to job_path(@job)
+      else
+        redirect_to job_application_path(@job, @application)
+      end
+    else
+      render :new
+    end
+  end
+
+  def new_ref
+    @title = "New Referral"
+    @application = Application.new
+    if user_signed_in?
+      @application.referrer_name = current_user.username
+      @application.referrer_email = current_user.email
+    end
+  end
+
+  def create_ref
+    @application = Application.new(application_ref_params)
+    if Rails.application.config.anon_apply != true
+      @application.applicant = @application.name
+    end
+    @application.job = Job.find(params[:job_id])
+    @application.status = "Applied"
+    @application.is_deleted = false
+    @application.is_referred = true
+
+    if verify_recaptcha(model: @application) && @application.save && @application.referrer_email != @application.email
+      flash[:success] = "Application referred!"
+
+      @application.job.collaborators.each do |touser|
+        if Rails.application.config.side_mail == true
+          NewApplicant.delay.notify(touser, @application, @job)
+        else
+          NewApplicant.notify(touser, @application, @job).deliver
         end
       end
       if Rails.application.config.side_mail == true
@@ -148,7 +192,10 @@ class ApplicationsController < ApplicationController
         redirect_to job_application_path(@job, @application)
       end
     else
-      render :new
+      if @application.referrer_email == @application.email
+        flash[:error] = 'You cannot refer yourself.'
+      end
+      render :new_ref
     end
   end
 
@@ -171,6 +218,10 @@ class ApplicationsController < ApplicationController
     @application.save
     flash[:success] = 'Application Deleted'
     redirect_to job_path(tempjob)
+  end
+
+  def referrer_details
+    @title = "Referrer's Details"
   end
 
   private
@@ -269,16 +320,34 @@ class ApplicationsController < ApplicationController
     end
 
     def application_params
+      params.require(:application).permit(:name, :email, :phoneno_inp, :details_nomark, :status)
+    end
+    
+    def application_ref_params
       if !@job.referral_incentive.nil?
         params.require(:application).permit(:name, :email, :phoneno_inp, :details_nomark, :status, :referrer_name, :referrer_email, :referrer_phone_inp)
       else
         params.require(:application).permit(:name, :email, :phoneno_inp, :details_nomark, :status)
       end
     end
-    
+
     def not_read_only
       if @job.is_closed == true
         flash[:error] = 'This job is archived hence can\'t be modified'
+        redirect_to job_path(@job)
+      end
+    end
+
+    def require_referrable
+      if @job.referral_incentive.nil?
+        flash[:error] = 'This job doesn\'t allow referrals.'
+        redirect_to job_path(@job)
+      end
+    end
+
+    def require_is_referred
+      if @application.is_referred == false
+        flash[:error] = 'This job has no referrer.'
         redirect_to job_path(@job)
       end
     end

@@ -1,4 +1,4 @@
-<%= form_for [@job, @application], :url => @application.new_record? ? job_applications_path(@job, @application) : job_application_path(@job, @application) do |f| %>
+<%= form_for [@job, @application], :url => create_job_application_ref_path(@job, @application) do |f| %>
 
 <% if f.object.errors.any? %>
   <%= error_messages_for f.object %>
@@ -7,17 +7,42 @@
 <div class="box">
 
 <div class="legend">
-  Apply for this job
+  Refer for this job
 </div>
 
-<% if @application.new_record? && (Rails.application.config.anon_apply == true) %>
-	<p>If you apply without an account, you won\'t be able to view or edit your application later</p>
+<% if !@job.referral_incentive.nil? %>
+
+<div class="boxline">
+<%= f.label :referrer_name, :class => "required" %>
+<%= f.text_field :referrer_name, :maxlength => 100 %>
+<div class="hintblock">Leave blank if no referrer</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :referrer_email, :class => "required" %>
+<%= f.email_field :referrer_email, :maxlength => 100 %>
+<div class="hintblock">Leave blank if no referrer</div>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :referrer_phone_inp, :class => "required" %>
+<%= f.telephone_field :referrer_phone_inp, :maxlength => 100 %>
+<div class="hintblock">Leave blank if no referrer</div>
+</div>
+<br>
+
 <% end %>
 
 <div class="boxline">
 <%= f.label :name, :class => "required" %>
 <%= f.text_field :name, :maxlength => 100 %>
+<% if Rails.application.config.anon_apply != true %>
+<div class="hintblock">Mention the EXACT username of user being referred</div>
+<% else %>
 <div class="hintblock">Mention your name as it is in the documents</div>
+<% end %>
 </div>
 <br>
 

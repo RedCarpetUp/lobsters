@@ -13,6 +13,9 @@ class Application < ActiveRecord::Base
     validates :applicant_id, presence: true
     validates :applicant_id, uniq_app: true, if: :is_new?
   end
+
+  #validates :is_referred, presence: true
+
   validates :job_id, presence: true
   validates_length_of :name, :in => 3..60
   validates :name, presence: true
@@ -23,12 +26,17 @@ class Application < ActiveRecord::Base
   validates_inclusion_of :status, :in => ["Shortlisted", "Applied", "Rejected", "Hired" ]
   validates :status, presence: true
 
-  #validates :referrer_name
-  validates :referrer_email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ }, :allow_blank => true
-  validates :referrer_phone_inp, phone: { types: [:mobile] }, :allow_nil => true
+  validates :referrer_name, presence: true, if: :by_referway?
+  validates_length_of :referrer_name, :in => 3..60, if: :by_referway?
+  validates :referrer_email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ }, presence: true, if: :by_referway?
+  validates :referrer_phone_inp, phone: { types: [:mobile] }, presence: true, if: :by_referway?
 
   def is_new?
     self.new_record? ? true : false
+  end
+
+  def by_referway?
+    self.is_referred ? true : false
   end
 
   def av_status
