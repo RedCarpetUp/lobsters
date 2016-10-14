@@ -15,21 +15,21 @@
 <div class="boxline">
 <%= f.label :referrer_name, :class => "required" %>
 <%= f.text_field :referrer_name, :maxlength => 100 %>
-<div class="hintblock">Leave blank if no referrer</div>
+<div class="hintblock">Enter your details so you can be contacted for referral incentive.</div>
 </div>
 <br>
 
 <div class="boxline">
 <%= f.label :referrer_email, :class => "required" %>
 <%= f.email_field :referrer_email, :maxlength => 100 %>
-<div class="hintblock">Leave blank if no referrer</div>
+<div class="hintblock">Enter your details so you can be contacted for referral incentive.</div>
 </div>
 <br>
 
 <div class="boxline">
 <%= f.label :referrer_phone_inp, :class => "required" %>
 <%= f.telephone_field :referrer_phone_inp, :maxlength => 100 %>
-<div class="hintblock">Leave blank if no referrer</div>
+<div class="hintblock">Enter your details so you can be contacted for referral incentive.</div>
 </div>
 <br>
 
@@ -41,7 +41,7 @@
 <% if Rails.application.config.anon_apply != true %>
 <div class="hintblock">Mention the EXACT username of user being referred</div>
 <% else %>
-<div class="hintblock">Mention your name as it is in the documents</div>
+<div class="hintblock">Mention applicant name as it is in the documents</div>
 <% end %>
 </div>
 <br>
@@ -49,21 +49,21 @@
 <div class="boxline">
 <%= f.label :email , :class => "required" %>
 <%= f.email_field :email, :maxlength => 100 %>
-<div class="hintblock">Mention your email where you would like to be contacted regarding this job</div>
+<div class="hintblock">Mention applicant email where you would like to be contacted regarding this job</div>
 </div>
 <br>
 
 <div class="boxline">
 <%= f.label :phoneno_inp , "Mobile no",:class => "required" %>
 <%= f.telephone_field :phoneno_inp, :maxlength => 100 %>
-<div class="hintblock">Mention your phone number</div>
+<div class="hintblock">Mention applicant phone number</div>
 </div>
 <br>
 
 <div class="boxline">
 <%= f.label :details_nomark, "Description", :class => "required" %>
 <%= f.text_area :details_nomark, :style => "width: 709px !important;", :rows => 5 %>
-<div class="hintblock">Give a brief description about you, make sure it contains all the fields mentioned as required</div>
+<div class="hintblock">Give a brief description about applicant, make sure it contains all the fields mentioned as required</div>
 </div>
 <br>
 

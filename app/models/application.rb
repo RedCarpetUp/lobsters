@@ -12,6 +12,7 @@ class Application < ActiveRecord::Base
   if Rails.application.config.anon_apply != true
     validates :applicant_id, presence: true
     validates :applicant_id, uniq_app: true, if: :is_new?
+    validates_inclusion_of :name, :in => User.pluck(:username).to_a
   end
 
   #validates :is_referred, presence: true
@@ -30,6 +31,7 @@ class Application < ActiveRecord::Base
   validates_length_of :referrer_name, :in => 3..60, if: :by_referway?
   validates :referrer_email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ }, presence: true, if: :by_referway?
   validates :referrer_phone_inp, phone: { types: [:mobile] }, presence: true, if: :by_referway?
+
 
   def is_new?
     self.new_record? ? true : false
