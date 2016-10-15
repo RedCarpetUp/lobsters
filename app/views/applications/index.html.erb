@@ -34,7 +34,9 @@
 		<th>Applicant's Name</th>
 		<th>Applied on</th>
 		<th>Application Status</th>
+    <% if !@job.referral_incentive.nil? %>
     <th>Referrer Details</th>
+    <% end %>
 	</tr>
   <%= render :partial => "applications/listitem", :collection => @applications,
     :as => :application %>
