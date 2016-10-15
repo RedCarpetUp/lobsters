@@ -9,7 +9,7 @@ class ApplQuestion < ActiveRecord::Base
   validates  :question, presence: true
   validates  :answer_nomark, presence: true, if: :is_old?
 
-  validates_length_of :question, :in => 3..60
+  validates_length_of :question, :in => 3..400
   validates_length_of :answer_nomark, :maximum => (64 * 1024), if: :is_old?
 
   def answer_nomark=(des)
