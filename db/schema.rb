@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013181045) do
+ActiveRecord::Schema.define(version: 20161117215641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(version: 20161013181045) do
     t.string   "referrer_email"
     t.string   "referrer_phone"
     t.boolean  "is_referred"
+  end
+
+  create_table "bookings", force: true do |t|
+    t.date     "booking_date"
+    t.time     "start_time"
+    t.time     "end_time"
+    t.integer  "requestor_id"
+    t.integer  "requestee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_deleted"
   end
 
   create_table "collabjobs_collaborators", id: false, force: true do |t|
@@ -303,6 +314,7 @@ ActiveRecord::Schema.define(version: 20161013181045) do
     t.string   "disabled_invite_reason",       limit: 200
     t.string   "provider"
     t.string   "uid"
+    t.boolean  "is_investor",                              default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

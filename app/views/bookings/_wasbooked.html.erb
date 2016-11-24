@@ -1,0 +1,16 @@
+<span class="link">
+	<%= link_to user_path(User.find(request.requestor_id).username) do %>
+		<%= User.find(request.requestor_id).username %>
+	<% end %>
+</span>
+<br>
+<% if request.booking_date == nil %>
+	<%= link_to "Assign a slot", edit_booking_path(request), :style=>"text-decoration:none;font-weight:700;" %>
+	&nbsp
+	<%= link_to "Decline", booking_path(request), :method => "delete", :style=>"text-decoration:none;font-weight:700;" %>
+<% else %>
+	<div><h4 style="display:inline-block;margin:0px;">Date:</h4> <p style="display:inline-block;margin:0px;"><%= request.booking_date %></p></div>
+	<div><h4 style="display:inline-block;margin:0px;">From:</h4> <p style="display:inline-block;margin:0px;"><%= request.start_time.to_s %></p></div>
+	<div><h4 style="display:inline-block;margin:0px;">To:</h4> <p style="display:inline-block;margin:0px;"><%= request.end_time.to_s %></p></div>
+<% end %>
+<br>

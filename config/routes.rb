@@ -52,6 +52,8 @@ Lobsters::Application.routes.draw do
     get "/search" => "search#index"
     get "/search/:q" => "search#index"
 
+    resources :bookings, :except => [:show, :new]
+
     resources :stories do
       post "upvote"
       post "downvote"

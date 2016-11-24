@@ -129,6 +129,12 @@
     </div>
   <% end %>
 
+  <% if @showing_user.is_active? and user_signed_in? and @showing_user.id != current_user.id and Booking.where( :requestee_id => @showing_user.id, :requestor_id => current_user.id, :is_deleted => false, :booking_date => nil ).empty? %>
+    <br>
+    <%= link_to "MEETUP", bookings_path( :requestee_id => @showing_user.id ), :method => "post", :class => "greenbutton", :style => "float:left;" %>
+    <br>
+  <% end %>
+
   <% if @user && @user.is_admin? && !@showing_user.is_moderator? %>
     <div style="clear: both;"></div>
     <br>

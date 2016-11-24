@@ -49,6 +49,9 @@ class User < ActiveRecord::Base
     :source => :story
   has_many :hats
 
+  has_many :was_bookeds, dependent: :destroy, foreign_key: "requestee_id", class_name: "Booking"
+  has_many :has_bookeds, dependent: :destroy, foreign_key: "requestor_id", class_name: "Booking"
+
   #has_secure_password
 
   validates :email, :format => { :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/ },
@@ -424,6 +427,10 @@ class User < ActiveRecord::Base
 
   def unread_message_count
     Keystore.value_for("user:#{self.id}:unread_messages").to_i
+  end
+
+  def unseen_meetup_count
+    self.was_bookeds.where( :is_deleted => false, :booking_date => nil ).count
   end
 
   def update_unread_message_count!

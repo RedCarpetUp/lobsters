@@ -1,0 +1,17 @@
+<div class="box">
+	<div class="legend">Requests you received</div>
+	<% if @myrequests.empty? %>
+		Nothing here yet
+		<br>
+	<% else %>
+		<%= render :partial => "bookings/wasbooked", :collection => @myrequests, :as => :request %>
+	<% end %>
+	<br>
+	<div class="legend">Requests you sent</div>
+	<% if @myaccepts.empty? %>
+		Nothing here yet
+		<br>
+	<% else %>
+		<%= render :partial => "bookings/hasbooked", :collection => @myaccepts, :as => :accept %>
+	<% end %>
+</div>

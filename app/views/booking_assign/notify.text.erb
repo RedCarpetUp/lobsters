@@ -1,0 +1,7 @@
+Your request to meetup with <%= @requestee.username %> was accepted. 
+
+<%= @requestee.username %> has assigned you time on <%= @request.booking_date %> between <%= @request.start_time %> and <%= @request.end_time %>.
+
+Visit link below to check it out:
+
+<%= Rails.application.root_url %>/bookings

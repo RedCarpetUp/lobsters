@@ -1,0 +1,39 @@
+<%= form_for @booking do |f| %>
+
+<% if f.object.errors.any? %>
+  <%= error_messages_for f.object %>
+<% end %>
+
+<div class="box">
+
+<div class="legend">
+  Assign a slot
+</div>
+
+<div class="boxline">
+<%= f.label :booking_date, :class => "required" %>
+<%= f.date_field :booking_date %>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :start_time, :class => "required" %>
+<%= f.time_field :start_time %>
+</div>
+<br>
+
+<div class="boxline">
+<%= f.label :end_time, :class => "required" %>
+<%= f.time_field :end_time %>
+</div>
+<br>
+
+</div>
+
+<div class="box">
+<div class="boxline actions">
+	<%= f.submit('Assign') %>
+</div>
+</div>
+
+<% end %>

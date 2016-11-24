@@ -94,6 +94,7 @@
         <a href="/filters" <%= @cur_url == "/filters" ?
           raw("class=\"cur_url\"") : "" %>><%= t('.filterslink') %></a>
         <% if @user %>
+
           <% if (count = @user.unread_message_count) > 0 %>
             <a href="/messages" class="new_messages <%= @cur_url == "/messages" ?
               "cur_url" : "" %>"><%= t(".newmessagelink", :count => count)
@@ -101,6 +102,15 @@
           <% else %>
             <a href="/messages" <%= @cur_url == "/messages" ?
               raw("class=\"cur_url\"") : "" %>><%= t('.messageslink') %></a>
+          <% end %>
+
+          <% if (count = @user.unseen_meetup_count) > 0 %>
+            <a href="/bookings" class="new_meetups <%= @cur_url == "/bookings" ?
+              "cur_url" : "" %>"><%= t(".newmeetuplink", :count => count)
+              %></a>
+          <% else %>
+            <a href="/bookings" <%= @cur_url == "/bookings" ?
+              raw("class=\"cur_url\"") : "" %>><%= t('.meetupslink') %></a>
           <% end %>
 
           <a href="/settings" <%= @cur_url == "/settings" ?
