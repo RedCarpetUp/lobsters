@@ -5,6 +5,7 @@ class BookingsController < ApplicationController
   	before_action :allowed_or_not_check, only: [:create]
 
 	def index
+		@cur_url = "/bookings"
 		@title = "My bookings"
 		@myaccepts = current_user.has_bookeds.where(:is_deleted => false)
 		@myrequests = current_user.was_bookeds.where(:is_deleted => false)

@@ -35,6 +35,7 @@ en:
         one: "1 New meetup request"
         other: "%{count} New meetup request"
       meetupslink: "Meetups"
+      investorslink: "Investors"
       loginlink: "Login"
       logoutlink: "Logout"
       confirmlogoutlink: "Are you sure you want to logout?"

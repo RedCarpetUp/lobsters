@@ -113,6 +113,9 @@
               raw("class=\"cur_url\"") : "" %>><%= t('.meetupslink') %></a>
           <% end %>
 
+          <a href="/investors" <%= @cur_url == "/investors" ?
+            raw("class=\"cur_url\"") : "" %>><%= t('.investorslink') %></a>
+
           <a href="/settings" <%= @cur_url == "/settings" ?
             raw("class=\"cur_url\"") : "" %>><%= @user.username %>
             (<%= @user.karma %>)</a>

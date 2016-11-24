@@ -1,0 +1,19 @@
+<li class="story job_item">
+
+  <div class="details">
+
+    <span class="link">
+        <%= link_to user_path(investor) do %>
+          <%= investor.username %>
+        <% end %>
+    </span>
+
+    <div class="byline">
+
+        <%= time_ago_in_words_label(investor.created_at, :strip_about => true) %>
+
+    </div>
+
+  </div>
+
+</li>

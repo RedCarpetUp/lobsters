@@ -1,0 +1,24 @@
+<div class="box" id="leader">
+  <em>Users who have registered with us as investors are listed here.</em>
+</div>
+
+<ol class="stories list">
+  <%= render :partial => "investors/listdetail", :collection => @investors,
+    :as => :investor %>
+</ol>
+
+<div class="morelink">
+  <% if @page && @page > 1 %>
+    <a href="<%= @cur_url %><%= @cur_url == "/" ? "" : "/" %><%=
+      @page == 2 ? "" : "page/#{@page - 1}" %>">&lt;&lt; Page
+      <%= @page - 1 %></a>
+  <% end %>
+
+  <% if @investors.count == 3 %>
+    <% if @page && @page > 1 %>
+      |
+    <% end %>
+    <a href="<%= @cur_url %><%= @cur_url == "/" ? "" : "/" %>page/<%=
+      @page + 1 %>">Page <%= @page + 1 %> &gt;&gt;</a>
+  <% end %>
+</div>

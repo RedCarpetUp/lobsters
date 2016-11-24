@@ -54,6 +54,9 @@ Lobsters::Application.routes.draw do
 
     resources :bookings, :except => [:show, :new]
 
+    get "/investors" => "investors#index"
+    get "/investors/page/:page" => "investors#index"
+
     resources :stories do
       post "upvote"
       post "downvote"
