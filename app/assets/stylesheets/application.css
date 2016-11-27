@@ -1316,11 +1316,17 @@ ol.stories.list li.story.job_item {
 }
 
 .greenbutton {
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 5px 12px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
+	background-color: #4CAF50; /* Green */
+	border: none;
+	color: white;
+	padding: 5px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+.rightbox {
+	float: right;
 }

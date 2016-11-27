@@ -269,4 +269,12 @@
 		display:none !important;
 	}
 
+	.rightbox {
+		float: initial;
+		margin-left: 0px;
+		margin-right: 0px;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+
 }

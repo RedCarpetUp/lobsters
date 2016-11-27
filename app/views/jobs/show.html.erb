@@ -11,48 +11,49 @@
 <% end %>
 <% end %>
 
-<% if Rails.application.config.anon_apply == true %>
-  <% if user_signed_in? %>
-    <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user)) %>
-      <% if !@job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id) %>    
-        <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
+<div class="box rightbox">
+
+  <% if Rails.application.config.anon_apply == true %>
+    <% if user_signed_in? %>
+      <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user)) %>
+        <% if !@job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id) %>
+          <%= link_to "APPLY", new_job_application_path(@job), :class => "greenbutton" %>
+        <% end %>
       <% end %>
+    <% else %>
+      <%= link_to "APPLY", new_job_application_path(@job), :class => "greenbutton" %>
     <% end %>
   <% else %>
-    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
-  <% end %>
-<% else %>
-  <% if user_signed_in? %>
-    <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user))&&(!@job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id)) %>
-      <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
+    <% if user_signed_in? %>
+      <% if (current_user != @job.poster)&&(!@job.collaborators.include?(current_user))&&(!@job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id)) %>
+        <%= link_to "APPLY", new_job_application_path(@job), :class => "greenbutton" %>
+      <% end %>
+    <% else %>
+      <%= link_to "APPLY", new_job_application_path(@job), :class => "greenbutton" %>
     <% end %>
-  <% else %>
-    <%= link_to "APPLY", new_job_application_path(@job), :style => "float:right;", :class => "greenbutton" %>
   <% end %>
-<% end %>
 
-<% if user_signed_in? && @job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id) %>
- <%= link_to "SEE YOUR APPLICATION", job_application_path(@job, Application.where(is_deleted: false).where(:applicant_id => current_user.id, :job_id => @job.id).first), :style => "float:right;" %>
-<% else %>
-<% if !@job.referral_incentive.nil? %>
-<br><%= link_to "REFER APPLICANT", new_job_application_ref_path(@job), :style => "float:right;", :class => "greenbutton" %>
-<% end %>
-<% end %>
+  <% if user_signed_in? && @job.applications.where(is_deleted: false).pluck(:applicant_id).include?(current_user.id) %>
+    <p><%= link_to "SEE YOUR APPLICATION", job_application_path(@job, Application.where(is_deleted: false).where(:applicant_id => current_user.id, :job_id => @job.id).first) %></p>
+  <% else %>
+    <% if !@job.referral_incentive.nil? %>
+      <%= link_to "REFER APPLICANT", new_job_application_ref_path(@job), :class => "greenbutton" %>
+    <% end %>
+  <% end %>
 
-<% if user_signed_in? && ((current_user == @job.poster)||(@job.collaborators.include?(current_user))) %>
-  <div class="box" style="float:right;">
-   <h3>No of applications: <%= @job.applications.where(is_deleted: false).count %></h3>
-   <%= link_to "SEE APPLICATIONS", job_applications_path(@job) %><br>
-   <% if !@job.is_closed %>
-    <%= link_to "Add Collaborator", add_collab_path(@job) %>
-   <% end %>
-   <br>
-   <%= link_to @job.is_closed ? "OPEN" : "CLOSE", toggle_job_path( :id => @job.id ), method: :post, data: { confirm: 'Are You Sure?' } %>
-   <% if user_signed_in? && (current_user == @job.poster) %>
-     <br><%= link_to "Collaborators list", job_collabs_path(@job) %>
-   <% end %>  
-  </div>
-<% end %>
+  <% if user_signed_in? && ((current_user == @job.poster)||(@job.collaborators.include?(current_user))) %>
+     <p><em>You can't apply to your own job</em></p>
+     <h3>No of applications: <%= @job.applications.where(is_deleted: false).count %></h3>
+     <p><%= link_to "SEE APPLICATIONS", job_applications_path(@job) %></p>
+     <% if !@job.is_closed %>
+      <p><%= link_to "Add Collaborator", add_collab_path(@job) %></p>
+     <% end %>
+     <p><%= link_to @job.is_closed ? "OPEN" : "CLOSE", toggle_job_path( :id => @job.id ), method: :post, data: { confirm: 'Are You Sure?' } %></p>
+     <% if user_signed_in? && (current_user == @job.poster) %>
+       <p><%= link_to "Collaborators list", job_collabs_path(@job) %></p>
+     <% end %>  
+  <% end %>
+</div>
 
 <h3>Description</h3>
 <div class="story_text">
