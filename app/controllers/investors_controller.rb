@@ -1,7 +1,7 @@
 class InvestorsController < ApplicationController
   before_action :require_user
 
-  ITEMS_PER_PAGE = 10
+  ITEMS_PER_PAGE = 20
 
   def index
 
